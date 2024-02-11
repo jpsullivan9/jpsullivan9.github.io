@@ -1,0 +1,14 @@
+{
+    "name": "anzom",
+    "version": "1.0.0",
+    "description": "A brief description of your project",
+    "main": "api/search.js",
+    "scripts": {
+      "start": "node api/search.js"
+    },
+    "dependencies": {
+      "mysql": "^2.18.1"
+    },
+    "author": "Your Name"
+}
+  
