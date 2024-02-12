@@ -4,11 +4,13 @@
     "description": "A brief description of your project",
     "main": "api/search.js",
     "scripts": {
-      "start": "node api/search.js"
+        "start": "node api/search.js"
     },
     "dependencies": {
-      "mysql": "^2.18.1"
+        "@vercel/postgres": "^0.7.2",
+        "dotenv": "^16.4.2",
+        "mysql": "^2.18.1",
+        "pg": "^8.11.3"
     },
     "author": "Your Name"
 }
-  

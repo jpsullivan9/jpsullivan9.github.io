@@ -1,21 +1,22 @@
-const mysql = require('mysql');
+const { Pool } = require('pg');
+require('dotenv').config();
 
-const pool = mysql.createPool({
-  connectionLimit: 10,
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URL, // Vercel automatically sets this env variable
+  ssl: {
+    rejectUnauthorized: false // Necessary if your DB requires SSL and you're using a self-signed certificate
+  }
 });
 
 module.exports = (req, res) => {
   const { q } = req.query;
   
-  pool.query('SELECT * FROM products WHERE name LIKE ?', [`%${q}%`], (error, results) => {
+  pool.query('SELECT * FROM products WHERE name ILIKE $1', [`%${q}%`], (error, results) => {
     if (error) {
-      res.status(500).json({ error: 'Database query failed' });
+      console.error('Database query error:', error); // Log the specific error to the console
+      res.status(500).json({ error: 'Database query failed', details: error.message });
       return;
     }
-    res.status(200).json(results);
+    res.status(200).json(results.rows);
   });
 };

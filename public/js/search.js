@@ -10,6 +10,7 @@ function searchProducts() {
                 resultsContainer.innerHTML = data.map(product => `
                     <div class="product">
                         <h2>${product.name}</h2>
+                        <img src="${product.image_url}" alt="${product.name}" style="width:100px; height:auto;">
                         <p>${product.description}</p>
                         <p>Price: $${product.price}</p>
                     </div>
