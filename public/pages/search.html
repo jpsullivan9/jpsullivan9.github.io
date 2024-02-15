@@ -7,8 +7,10 @@
     </head>
     <body>
         <div>
-            <input type="text" id="searchQuery" placeholder="Enter search term...">
-            <button onclick="searchProducts()">Search</button>
+            <form id="searchForm">
+                <input type="text" id="searchQuery" name="q" placeholder="Search here...">
+                <button type="submit">Search</button>
+            </form>
         </div>
         <div id="searchResults"></div>
 
