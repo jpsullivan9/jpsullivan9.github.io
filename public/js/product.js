@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('productImage').alt = product.name;
                 document.getElementById('productDescription').textContent = product.description;
                 document.getElementById('productPrice').textContent = `Price: $${product.price}`;
-                // Additional product details can be added here
             })
             .catch(error => {
                 console.error('Error:', error);
