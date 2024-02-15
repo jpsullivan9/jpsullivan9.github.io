@@ -8,7 +8,12 @@ function searchProducts(query) {
             const resultsContainer = document.getElementById('searchResults');
             if (data.error) {
                 resultsContainer.textContent = data.error;
-            } else {
+            }
+            else if (data.length == 0)
+            {
+                resultsContainer.innerHTML = `<div>No results found for "${query}".</div>`;
+            } 
+            else {
                 resultsContainer.innerHTML = data.map(product => `
                     <div class="product">
                         <br>
