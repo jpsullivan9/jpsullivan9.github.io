@@ -51,13 +51,13 @@ To pull the project to your local machine, navigate to the desired directory in 
 git pull https://github.com/jpsullivan9/jpsullivan9.github.io.git
 ```
 
-##Installing Dependencies
+## Installing Dependencies
 To install all necessary dependencies to run this project locally on your device, execute:
 ```bash
 npm install
 ```
 
-##Running the Project Locally
+## Running the Project Locally
 To create a simulated web server on your device and open it at the link provided in the terminal, use:
 ```bash
 npm test 
@@ -65,7 +65,7 @@ npm test
 
 **Note**: The Vercel server online updates with git push commands, and your localized Vercel server updates with any file edits. Just refresh the page in your browser to see changes.
 
-##Committing Your Changes
+## Committing Your Changes
 
 When you believe your changes function well and want to commit them to the web server:
 
