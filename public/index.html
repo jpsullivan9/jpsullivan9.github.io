@@ -1,22 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Anzom</title>
+    <meta charset="UTF-8">
+    <title>Anzom - Your One-Stop Shop</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
     <nav>
-        <img src = "/img/logo.png">
+        <img src="public/img/logo.png" alt="Anzom Logo">
 
-        <p><a href="/pages/account.html">Log In/Sign Up</a></p>
+        <p><a href="pages/account.html">Log In/Sign Up</a></p>
 
-        <form action="/pages/search.html" method="get">
-            <input type="text" name="q" placeholder="Search here...">
+        <form id="searchForm">
+            <input type="text" id="searchQuery" placeholder="Search here...">
             <button type="submit">Search</button>
         </form>
 
-        <p><a href="/pages/cart.html">My Cart</a></p>
+        <p><a href="pages/cart.html">My Cart</a></p>
     </nav>
 
-    <h2>Featured products go here. (Picture majority of products to be found by search bar.)</h2>
+    <h2>Featured products</h2>
+    <div id="searchResults">
+        <!-- Featured products will be displayed here -->
+    </div>
 
-    
+    <script src="public/js/search.js"></script> <!-- Assuming your search.js file is in a js folder within the public folder -->
 </body>
+</html>
