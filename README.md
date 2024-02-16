@@ -39,7 +39,7 @@ To ensure you're working with the latest version of the project:
 2. Click on **Repository** in the menu bar.
 3. Select **Pull** from the dropdown to fetch the latest changes from the remote repository.
 
-
+***
 
 
 
