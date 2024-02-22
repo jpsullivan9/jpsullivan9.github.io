@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Anzom - Welcome to Our Store</title>
+    <title>Product Details</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -23,20 +23,19 @@
     </header>
 
     <main>
-        <section class="hero">
-            <h1>Welcome to Anzom</h1>
-            <p>Discover the latest trends and shop with confidence.</p>
-            <a href="/pages/products.html" class="btn">Shop Now</a>
-        </section>
-
-        <section class="featured-products">
-            <h2>Featured Products</h2>
-            <!-- Add featured products here -->
-        </section>
+        <div id="productDetails">
+            <img id="productImage" src="" alt="Product Image" style="width:300px; height:auto;">
+            <h2 id="productName"></h2>
+            <p id="productDescription"></p>
+            <p id="productPrice"></p>
+            <button type="button" id="addToCartButton">Add to Cart</button>
+        </div>
     </main>
 
     <footer>
         <p>All rights reserved &copy; 2024 Anzom</p>
     </footer>
+
+    <script src="../js/product.js"></script>
 </body>
 </html>
