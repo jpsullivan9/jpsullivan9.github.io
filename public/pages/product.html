@@ -8,7 +8,7 @@
 <body>
     <header>
         <nav>
-            <a href="index.html"><img src="/img/logo.png" alt="Anzom Logo"></a>
+            <a href="../index.html"><img src="/img/logo.png" alt="Anzom Logo"></a>
             <ul>
                 <li><a href="/pages/account.html">Log In/Sign Up</a></li>
                 <li>
@@ -30,13 +30,21 @@
         </section>
 
         <section class="featured-products">
-            <h2>Featured Products</h2>
-            <!-- Add featured products here -->
+            <!-- Featured products will be dynamically inserted here -->
         </section>
     </main>
 
     <footer>
         <p>All rights reserved &copy; 2024 Anzom</p>
     </footer>
+
+    <!-- Include the landingPage.js script -->
+    <script src="../js/landingPage.js"></script>
+    <script>
+        // Call the displayFeaturedProducts function when the page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            displayFeaturedProducts();
+        });
+    </script>
 </body>
 </html>
