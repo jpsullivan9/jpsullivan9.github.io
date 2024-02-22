@@ -11,12 +11,20 @@ const pool = new Pool({
 module.exports = async (req, res) => {
   try {
     const { id } = req.query;
-    const { rows } = await pool.query('SELECT * FROM products WHERE id = $1', [id]);
+    if (id) {
+      // Fetch a single product by ID
+      const { rows } = await pool.query('SELECT * FROM products WHERE id = $1', [id]);
 
-    if (rows.length > 0) {
-      res.status(200).json(rows[0]);
+      if (rows.length > 0) {
+        res.status(200).json(rows[0]);
+      } else {
+        res.status(404).json({ error: 'Product not found' });
+      }
     } else {
-      res.status(404).json({ error: 'Product not found' });
+      // Fetch only featured products
+      const { rows } = await pool.query('SELECT * FROM products WHERE featured = true');
+
+      res.status(200).json(rows);
     }
   } catch (error) {
     console.error('Database query error:', error);
