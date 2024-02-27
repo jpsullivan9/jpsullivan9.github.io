@@ -4,7 +4,6 @@
     "description": "A brief description of your project",
     "main": "api/search.js",
     "scripts": {
-        "start": "node api/search.js",
         "test": "vercel dev"
     },
     "dependencies": {
