@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
         res.status(401).json({ error: "Invalid credentials." });
       }
     } else {
-      res.status(404).json({ error: "User not found." });
+      res.status(404).json({ error: "User not found - TESTING." });
     }
   } catch (error) {
     console.error('Login error:', error);
