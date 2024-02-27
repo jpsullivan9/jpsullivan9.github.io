@@ -1,7 +1,13 @@
-// WIP //
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
+    const messageBox = document.getElementById('messageBox');
+
+    function displayMessage(message, isError = false) {
+        messageBox.textContent = message;
+        messageBox.style.color = isError ? 'red' : 'green';
+        messageBox.style.display = 'block';
+    }
 
     loginForm.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -22,11 +28,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
-            console.log('Login successful:', data);
+            displayMessage('Login successful: Welcome ' + data.user.name);
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Login Error: ' + error.message);
+            displayMessage('Login Error: ' + error.message, true);
         });
     });
 
@@ -50,11 +55,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
-            console.log('Signup successful:', data);
+            displayMessage('Signup successful: Welcome ' + data.user.name);
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Signup Error: ' + error.message);
+            displayMessage('Signup Error: ' + error.message, true);
         });
     });
 });
