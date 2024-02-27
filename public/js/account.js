@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
-            displayMessage('Login successful: Welcome ' + data.username);
+            displayMessage('Login successful: Welcome ' + data.Username);
         })
         .catch(error => {
             displayMessage('Login Error: ' + error.message, true);
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
-            displayMessage('Signup successful: Welcome ' + data.username);
+            displayMessage('Signup successful: Welcome ' + data.Username);
         })
         .catch(error => {
             displayMessage('Signup Error: ' + error.message, true);
