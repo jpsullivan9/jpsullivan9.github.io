@@ -1,10 +1,23 @@
 {
     "name": "anzom",
     "version": "1.0.0",
-    "description": "A brief description of your project",
+    "description": "An online ecommerce store that provides competitive pricing to the customers",
     "main": "api/search.js",
     "scripts": {
-        "test": "vercel dev"
+        "test": "vercel",
+        "local": "vercel dev"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jpsullivan9/jpsullivan9.github.io.git"
+    },
+    "keywords": [
+        "anzom",
+        "ecommerce",
+        "ecommerce store"
+    ],
+    "bugs": {
+        "url": "https://github.com/jpsullivan9/jpsullivan9.github.io.git/issues"
     },
     "dependencies": {
         "@vercel/postgres": "^0.7.2",
@@ -15,7 +28,7 @@
         "pg": "^8.11.3",
         "uuid": "^9.0.1"
     },
-    "author": "James Sullivan",
+    "author": "",
     "devDependencies": {
         "vercel": "^33.6.1"
     }

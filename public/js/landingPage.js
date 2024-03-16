@@ -15,7 +15,7 @@ const displayFeaturedProducts = async () => {
         // Generate HTML for each featured product
         const featuredProductHTML = products.map(product => `
             <div class="product">
-                <img src="${product.image}" alt="${product.name}">
+                <img src="${product.image_url}" alt="${product.name}">
                 <h3>${product.name}</h3>
                 <p>${product.description}</p>
                 <p>Price: $${product.price}</p>
@@ -28,6 +28,3 @@ const displayFeaturedProducts = async () => {
         console.error('Error fetching and displaying featured products:', error);
     }
 };
-
-// Export the function to be used in other modules
-export { displayFeaturedProducts };
