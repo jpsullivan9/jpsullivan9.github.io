@@ -10,13 +10,13 @@
         "@vercel/postgres": "^0.7.2",
         "bcrypt": "^5.1.1",
         "debug": "^4.3.4",
-        "dotenv": "^16.4.2",
+        "dotenv": "^16.4.5",
         "mysql": "^2.18.1",
         "pg": "^8.11.3",
         "uuid": "^9.0.1"
     },
     "author": "James Sullivan",
     "devDependencies": {
-        "vercel": "^33.5.2"
+        "vercel": "^33.6.1"
     }
 }

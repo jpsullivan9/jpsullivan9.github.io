@@ -16,10 +16,44 @@ npm install
 
 ## Test the Project Locally
 1. After you make some changes and want to test them before pushing run the following in terminal:
-```bash
-npm test
-```
-2. This command creates a simulated web server on your device. Open the link provided in the terminal to view the project.
+    ```bash
+    npm test
+    ```
+2. The first time you run this you will be asked to link your [Github](https://github.com) account to `Vercel`.  This is to be done only for the first time.  If you have already performed this step, proceed to next.  Otherwise, follow the sub-points.
+    * You will now be asked to choose a login method because no credential is found.
+        ```shell
+        > anzom@1.0.0 test
+        > vercel dev
+
+        (node:93517) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+        (Use `node --trace-deprecation ...` to show where the warning was created)
+        Vercel CLI 33.6.1
+        > > No existing credentials found. Please log in:
+        ? Log in to Vercel
+        ● Continue with GitHub
+        ○ Continue with GitLab
+        ○ Continue with Bitbucket
+        ○ Continue with Email
+        ○ Continue with SAML Single Sign-On
+        ─────────────────────────────────
+        ○ Cancel
+        ```
+    * It selects `Continue with GitHub` by default.  If you want to use a different login mechanism such as, `GitLab` or `Email`, use the :arrow_up: or :arrow_down: key on your keyboard to select one.  Once done, HIT ENTER.
+    * You will be asked to login as appropriate.  For `GitHub`, you will be taken to the website where you will login to your account.
+    * After you login, you will be displayed with the below message and the asked a few questions.  Hit ENTER to select the default selection, i.e. `Y`.
+        ```shell
+        > Please visit the following URL in your web browser:
+        > Success! GitHub authentication complete for <your_email>
+        ? Set up and deploy “~/Documents/Projects/personal/jpsullivan9.github.io”? [Y/n] y
+        ? Which scope do you want to deploy to? <your_name> projects
+        ? Found project “<your_name>/jpsullivan9-github-io”. Link to it? [Y/n
+        ] y
+        🔗  Linked to <your_name>/jpsullivan9-github-io (created .vercel)
+        🔍  Inspect: https://vercel.com/<your_name>/jpsullivan9-github-io/ChGStJeWioTklsdLASDsuCTVR2WE [3s]
+        ✅  Preview: https://jpsullivan9-github-6mh6jvfkn.vercel.app [3s]
+        📝  To deploy to production (jpsullivan9-github-io.vercel.app), run `vercel --prod`
+        ```
+3. This command creates a simulated web server on your device. Open the link provided in the terminal to view the project.
 **Note:** The Vercel server online updates with git push commands, and your localized Vercel server updates with any file edits. Simply refresh the page in your browser to see changes.
 
 ## Committing Your Changes
