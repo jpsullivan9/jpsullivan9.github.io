@@ -53,34 +53,3 @@ h2 {
     flex-wrap: wrap;
     justify-content: center;
 }
-
-.product {
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 300px;
-}
-
-.product img {
-    width: 100px;
-    height: auto;
-    margin-bottom: 10px;
-}
-
-.product h2 {
-    margin: 5px 0;
-}
-
-.product p {
-    margin: 5px 0;
-}
-
-.product button {
-    padding: 5px 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-}
