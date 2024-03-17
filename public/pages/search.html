@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Search</title>
-        <link rel="stylesheet" href="../css/style.css">
-    </head>
-    <body>
-        <div class = "icons-top">
-            <a href = "../index.html"><img src = "../img/logo.png" width = "10%" height = "10%"></a>
-            <a href = "/pages/cart.html"><img src = "https://uxwing.com/wp-content/themes/uxwing/download/e-commerce-currency-shopping/shopping-cart-icon.png" width = "5%" height = "5%"></a>
-        </div>
-        <div>
-            <form id="searchForm">
-                <input type="text" id="searchQuery" name="q" placeholder="Search here...">
-                <button type="submit">Search</button>
-            </form>
-        </div>
-        <div id="searchResults"></div>
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav>
+        <a href="../index.html"><img src="../img/logo.png" alt="Anzom"></a>
+        <form id="searchForm">
+            <input type="text" id="searchQuery" name="q" placeholder="Search here...">
+            <button type="submit">Search</button>
+        </form>
+        <a href="/pages/cart.html"><img src="https://uxwing.com/wp-content/themes/uxwing/download/e-commerce-currency-shopping/shopping-cart-icon.png" alt="Cart"></a>
+    </nav>
+    <div id="searchResults"></div>
 
-        <script src="../js/search.js"></script>
-    </body>
+    <script src="../js/search.js"></script>
+</body>
 </html>

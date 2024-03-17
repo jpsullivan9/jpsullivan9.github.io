@@ -13,6 +13,8 @@ function searchProducts(query) {
             else {
                 resultsContainer.innerHTML = data.map(product => `
                     <div class="product" onclick="location.href='/pages/product.html?id=${product.id}'" style="cursor:pointer;">
+                        <br>
+                        <br>
                         <img src="${product.image_url}" alt="${product.name}" style="width:100px; height:auto;">
                         <h2>${product.name}</h2>
                         <p>${product.description}</p>
