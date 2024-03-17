@@ -1,18 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const searchQuery = params.get('q');
+    const minPrice = document.getElementById('minPrice').value;
+    const maxPrice = document.getElementById('maxPrice').value;
+    
     if (searchQuery) {
         document.getElementById('searchQuery').value = searchQuery;
-        searchProducts(searchQuery);
+        searchProducts(searchQuery, minPrice, maxPrice);
     }
 
     const searchForm = document.getElementById('searchForm');
     searchForm.addEventListener('submit', function(event) {
         event.preventDefault();
-        const query = document.getElementById('searchQuery').value;
-        const minPrice = document.getElementById('minPrice').value;
-        const maxPrice = document.getElementById('maxPrice').value;
-        searchProducts(query, minPrice, maxPrice);
+        searchProducts(document.getElementById('searchQuery').value, minPrice, maxPrice);
     });
 });
 
@@ -21,11 +21,13 @@ function searchProducts(query, minPrice = '', maxPrice = '') {
     fetch(`/api/search?${queryParams}`)
         .then(response => response.json())
         .then(data => {
-            displaySearchResults(data);
+            if (data.suggestions) {
+                displaySuggestions(data.suggestions, query);
+            } else {
+                displaySearchResults(data);
+            }
         })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+        .catch(error => console.error('Error:', error));
 }
 
 function displaySearchResults(data) {
@@ -44,5 +46,15 @@ function displaySearchResults(data) {
                 <p>Price: $${product.price}</p>
             </div>
         `).join('');
+    }
+}
+
+function displaySuggestions(suggestions, originalQuery) {
+    const resultsContainer = document.getElementById('searchResults');
+    if (suggestions.length > 0) {
+        const topSuggestion = suggestions[0];
+        resultsContainer.innerHTML = `<div>Did you mean: <a href="#" onclick="searchProducts('${topSuggestion}')">${topSuggestion}</a> instead of "${originalQuery}"?</div>`;
+    } else {
+        resultsContainer.innerHTML = `<div>No matches found for "${originalQuery}".</div>`;
     }
 }
