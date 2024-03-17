@@ -19,7 +19,7 @@ const showHome = async (ele) => {
         <div class="row p-2">
             <div class="col-2"></div>
             <div class="col-8">
-                <div class="row">${displayCategories()}</div>
+                <div class="row">${displayCategories(categories)}</div>
             </div>
             <div class="col-2"></div>
         </div>
