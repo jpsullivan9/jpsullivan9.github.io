@@ -1,6 +1,6 @@
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 const bcrypt = require('bcrypt');
-require('dotenv').config();
+require("dotenv").config();
 
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
