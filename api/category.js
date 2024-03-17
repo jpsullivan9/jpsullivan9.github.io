@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
         const { id } = req.query;
         if (id) {
             // Fetch a single product by ID
-            const { rows } = await pool.query('SELECT * FROM category WHERE id = $1', [id]);
+            const { rows } = await pool.query('SELECT * FROM categories WHERE id = $1', [id]);
 
             if (rows.length > 0) {
                 res.status(200).json(rows[0]);
@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
             }
         } else {
             // Fetch only featured products
-            const { rows } = await pool.query('SELECT * FROM category');
+            const { rows } = await pool.query('SELECT * FROM categories');
 
             res.status(200).json(rows);
         }

@@ -10,27 +10,35 @@ const setActive = (ele) => {
     currentActive = ele;
 };
 
-const showHome = async () => {
+const showHome = async (ele) => {
+    await fetchCategories();
     const homeContent = `
         <div class="row justify-content-md-center p-2">
             <img class="img-fluid" src="https://www.x-cart.com/wp-content/uploads/2019/01/ecommerce.jpg" alt="Online commerce courtesy xcart"/>
         </div>
         <div class="row p-2">
-            <div class="col-3"></div>
-            <div class="col-6">
-                <div class="row">${await displayCategories()}</div>
+            <div class="col-2"></div>
+            <div class="col-8">
+                <div class="row">${displayCategories()}</div>
             </div>
-            <div class="col-3"></div>
+            <div class="col-2"></div>
         </div>
     `;
+    const catMenuItems = `
+        <a class="dropdown-item" href="#">
+            Categories &raquo;
+        </a>
+        <ul class="dropdown-menu dropdown-submenu">
+            ${categories.map(cat => `
+                <li>
+                    <a class="dropdown-item" href="#">${cat.name}</a>
+                </li>
+            `).join("")}
+        </ul>
+    `;
+    setActive(ele);
+    document.querySelector("#catMenu").innerHTML = catMenuItems;
     rootContainer.innerHTML = homeContent;
 };
 
-const clearRoot = (ele) => {
-    rootContainer.innerHTML = "";
-    setActive(ele);
-    showHome();
-};
-
-setActive(homeEle);
-showHome();
+showHome(homeEle);

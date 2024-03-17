@@ -1,8 +1,7 @@
 // landingPage.js
 
-const displayFeaturedProducts = async (ele) => {
+const displayFeaturedProducts = async () => {
     try {
-        setActive(ele);
         // Fetch featured products from the backend API
         const response = await fetch('/api/featured-products');
         if (!response.ok) {

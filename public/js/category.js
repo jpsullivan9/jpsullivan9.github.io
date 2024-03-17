@@ -1,16 +1,24 @@
 // category.js
-const displayCategories = async () => {
+let categories;
+const fetchCategories = async () => {
     try {
         // Fetch categories from the backend API
         const response = await fetch('/api/category');
         if (!response.ok) {
-            throw new Error('Failed to fetch categories');
+            throw new Error("Failed to fetch categories");
         }
-        const categories = await response.json();
+        categories = await response.json();
+    } catch (error) {
+        console.error("Error fetching and displaying featured categories:", error);
+    }
+};
 
-        // Generate HTML for each featured product
-        const catHtml = categories.map(category => `
-        <div class="col-sm-4 pb-3">
+const displayCategories = () => {
+    if (!categories) return "";
+
+    // Generate HTML for each featured product
+    const catHtml = categories.map(category => `
+        <div class="col-sm-4 p-3">
             <div class="card" style="width: 18rem;">
                 <img src="${category.image_url}" class="card-img-top" alt="${category.name}">
                 <div class="card-body">
@@ -19,11 +27,8 @@ const displayCategories = async () => {
                 </div>
             </div>
         </div>
-        `).join('');
+    `).join("");
 
-        return catHtml;
-    } catch (error) {
-        console.error('Error fetching and displaying featured categories:', error);
-    }
+    return catHtml;
 };
 
