@@ -1,5 +1,6 @@
 // category.js
 let categories;
+
 const fetchCategories = async () => {
     try {
         // Fetch categories from the backend API
@@ -27,10 +28,10 @@ const fetchCategory = async (id) => {
     }
 };
 
-const fetchSubCategories = async (catId) => {
+const fetchSubCategories = async (isLanding, id) => {
     try {
         // Fetch categories from the backend API
-        const response = await fetch(`/api/subcategories?catId=${catId}`);
+        const response = await fetch(`/api/subcategories?${isLanding ? "catId" : "id"}=${id}`);
         if (!response.ok) {
             throw new Error("Failed to fetch sub-categories");
         }
@@ -40,9 +41,25 @@ const fetchSubCategories = async (catId) => {
     }
 };
 
-const displayCategoryLandingPage = async (id) => {
+const loadMenu = () => {
+    const catMenuItems = `
+        <a class="dropdown-item" href="#">
+            Categories &raquo;
+        </a>
+        <ul class="dropdown-menu dropdown-submenu">
+            ${categories.map(cat => `
+                <li>
+                    <a class="dropdown-item" href="#">${cat.name}</a>
+                </li>
+            `).join("")}
+        </ul>
+    `;
+    document.querySelector("#catMenu").innerHTML = catMenuItems;
+};
+
+const displayLandingPage = async (id) => {
     const cat = await fetchCategory(id);
-    const subCats = await fetchSubCategories(cat.id);
+    const subCats = await fetchSubCategories(true, cat.id);
     const homeContent = `
         <div class="row justify-content-md-center p-2">
             <img class="img-fluid" src="${cat.image_url}" alt="Online commerce courtesy xcart"/>
@@ -52,22 +69,24 @@ const displayCategoryLandingPage = async (id) => {
         <div class="row p-2">
             <div class="col-2"></div>
             <div class="col-8">
-                <div class="row">${displayCategories(subCats)}</div>
+                <div class="row">${displayCategories(true, subCats)}</div>
             </div>
             <div class="col-2"></div>
         </div>
     `;
+    currentPageId = "cat";
+    buildHash(id)
     rootContainer.innerHTML = homeContent;
 };
 
-const displayCategories = (cardColl) => {
+const displayCategories = (isListing, cardColl) => {
     if (!cardColl) return "";
 
     // Generate HTML for each featured product
     const catHtml = cardColl.map(card => `
         <div class="col-sm-4 p-3">
-            <div class="card" style="width: 18rem;" onclick="displayCategoryLandingPage('${card.id}');">
-                <img src="${card.image_url}" class="card-img-top" alt="${card.name}">
+            <div class="card" style="width: 18rem;" onclick="${isListing ? "displayListingPage" : "displayLandingPage"}('${card.id}');">
+                <img src="${card.image_url}" class="card-img-top" alt="${card.name}"/>
                 <div class="card-body">
                     <h5 class="card-title">${card.name}</h5>
                     <p class="card-text">${card.description?.substring(0, 50)}...</p>
