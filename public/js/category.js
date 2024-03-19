@@ -49,7 +49,7 @@ const loadMenu = () => {
         <ul class="dropdown-menu dropdown-submenu">
             ${categories.map(cat => `
                 <li>
-                    <a class="dropdown-item" href="#">${cat.name}</a>
+                    <a class="dropdown-item" href="#" onclick="displayLandingPage('${cat.id}')">${cat.name}</a>
                 </li>
             `).join("")}
         </ul>

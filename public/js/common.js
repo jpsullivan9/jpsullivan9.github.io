@@ -46,7 +46,7 @@ const buildHash = (id) => {
 
 const noImageUrl = (url) => {
     if (!url) {
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png";
+        return "https://static.thenounproject.com/png/3104878-200.png";
     }
     return url;
 };
