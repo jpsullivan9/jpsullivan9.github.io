@@ -28,7 +28,7 @@ const setHashForUrl = () => {
 };
 
 const buildHash = (id) => {
-    switch(currentPageId) {
+    switch (currentPageId) {
         case "cat":
             urlHash.delete("subCat");
             urlHash.set("cat", id);
@@ -49,4 +49,12 @@ const noImageUrl = (url) => {
         return "https://static.thenounproject.com/png/3104878-200.png";
     }
     return url;
+};
+
+const getRandomImage = (images) => {
+    const minCeiled = Math.ceil(1);
+    const maxFloored = Math.floor(images.length);
+    // The maximum is inclusive and the minimum is inclusive
+    const randomIndex = Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+    return images[randomIndex];
 };

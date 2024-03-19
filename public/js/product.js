@@ -16,7 +16,7 @@ const displayListingPage = async (id) => {
     const subCat = await fetchSubCategories(false, id);
     let products = await fetchProducts(false, id);
     if (!Array.isArray(products)) products = Array.of(products);
-    const homeContent = `
+    const listingContent = `
         <div class="row justify-content-md-center p-2">
             <img class="img-fluid" src="${noImageUrl(subCat.image_url)}" alt="Online commerce courtesy xcart"/>
         </div>
@@ -40,5 +40,5 @@ const displayListingPage = async (id) => {
     `;
     currentPageId = "subCat";
     buildHash(id)
-    rootContainer.innerHTML = homeContent;
+    rootContainer.innerHTML = listingContent;
 };

@@ -60,7 +60,7 @@ const loadMenu = () => {
 const displayLandingPage = async (id) => {
     const cat = await fetchCategory(id);
     const subCats = await fetchSubCategories(true, cat.id);
-    const homeContent = `
+    const landingContent = `
         <div class="row justify-content-md-center p-2">
             <img class="img-fluid" src="${noImageUrl(cat.image_url)}" alt="Online commerce courtesy xcart"/>
         </div>
@@ -76,7 +76,7 @@ const displayLandingPage = async (id) => {
     `;
     currentPageId = "cat";
     buildHash(id)
-    rootContainer.innerHTML = homeContent;
+    rootContainer.innerHTML = landingContent;
 };
 
 const displayCategories = (isListing, cardColl) => {
