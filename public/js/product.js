@@ -21,7 +21,7 @@ const displayListingPage = async (id) => {
             <img class="img-fluid" src="${noImageUrl(subCat.image_url)}" alt="Online commerce courtesy xcart"/>
         </div>
         <h2>${subCat.name}</h2>
-        <p>${subCat?.description}</p>
+        <p>${getNoDescContent(subCat.description)}</p>
         <div class="row p-2">
             <div class="col-2"></div>
             <div class="col-8">

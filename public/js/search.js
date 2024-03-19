@@ -3,14 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchQuery = params.get('q');
     const minPrice = document.getElementById('minPrice').value;
     const maxPrice = document.getElementById('maxPrice').value;
-    
+
     if (searchQuery) {
         document.getElementById('searchQuery').value = searchQuery;
         searchProducts(searchQuery, minPrice, maxPrice);
     }
 
     const searchForm = document.getElementById('searchForm');
-    searchForm.addEventListener('submit', function(event) {
+    searchForm.addEventListener('submit', function (event) {
         event.preventDefault();
         searchProducts(document.getElementById('searchQuery').value, minPrice, maxPrice);
     });
@@ -42,7 +42,7 @@ function displaySearchResults(data) {
                 <br>
                 <img src="${noImageUrl(product.image_url)}" alt="${product.name}" style="width:100px; height:auto;">
                 <h2>${product.name}</h2>
-                <p>${product.description}</p>
+                <p>${getNoDescContent(product.description)}</p>
                 <p>Price: $${product.price}</p>
             </div>
         `).join('');

@@ -65,7 +65,7 @@ const displayLandingPage = async (id) => {
             <img class="img-fluid" src="${noImageUrl(cat.image_url)}" alt="Online commerce courtesy xcart"/>
         </div>
         <h2>${cat.name}</h2>
-        <p>${cat.description}</p>
+        <p>${getNoDescContent(cat.description)}</p>
         <div class="row p-2">
             <div class="col-2"></div>
             <div class="col-8">
@@ -89,7 +89,7 @@ const displayCategories = (isListing, cardColl) => {
                 <img src="${noImageUrl(card.image_url)}" class="card-img-top" alt="${card.name}"/>
                 <div class="card-body">
                     <h5 class="card-title">${card.name}</h5>
-                    <p class="card-text">${card.description?.substring(0, 50)}...</p>
+                    <p class="card-text">${getNoDescContent(card.description).substring(0, 50)}...</p>
                 </div>
             </div>
         </div>

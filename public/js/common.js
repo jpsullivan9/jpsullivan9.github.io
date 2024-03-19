@@ -58,3 +58,10 @@ const getRandomImage = (images) => {
     const randomIndex = Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
     return images[randomIndex];
 };
+
+const getNoDescContent = (desc) => {
+    if (!desc) {
+        return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed dignissim leo, eget pharetra enim. Donec quis dignissim tellus. Sed aliquet, nisi eget elementum porta, mauris nulla pharetra nisi, eget vulputate arcu purus posuere lorem. Nunc et erat turpis. Duis rutrum ut magna laoreet consequat. Ut finibus ante venenatis dolor venenatis, at lacinia tellus consectetur. Quisque dictum id dolor eu pulvinar. Duis ultricies neque ut mattis rhoncus. Mauris sem tellus, accumsan nec massa quis, viverra sagittis nulla. Vestibulum auctor sapien vel odio ullamcorper faucibus. Duis congue sagittis vestibulum."
+    }
+    return desc;
+};

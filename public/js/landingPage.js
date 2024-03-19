@@ -15,7 +15,7 @@ const displayFeaturedProducts = async () => {
                 <div class="product">
                     <img src="${noImageUrl(product.image_url)}" alt="${product.name}">
                     <h3>${product.name}</h3>
-                    <p>${product.description}</p>
+                    <p>${getNoDescContent(product.description)}</p>
                     <p>Price: $${product.price}</p>
                 </div>
             </section>
