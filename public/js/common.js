@@ -43,3 +43,10 @@ const buildHash = (id) => {
     };
     setHashForUrl();
 };
+
+const noImageUrl = (url) => {
+    if (!url) {
+        return "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png";
+    }
+    return url;
+};

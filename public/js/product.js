@@ -18,7 +18,7 @@ const displayListingPage = async (id) => {
     if (!Array.isArray(products)) products = Array.of(products);
     const homeContent = `
         <div class="row justify-content-md-center p-2">
-            <img class="img-fluid" src="${subCat.image_url}" alt="Online commerce courtesy xcart"/>
+            <img class="img-fluid" src="${noImageUrl(subCat.image_url)}" alt="Online commerce courtesy xcart"/>
         </div>
         <h2>${subCat.name}</h2>
         <p>${subCat?.description}</p>
@@ -28,7 +28,7 @@ const displayListingPage = async (id) => {
                 ${products.map(product => {
                     return (`
                     <div class="row">
-                        <div class="col-3"><img src="${product.image_url}" class="card-img-top" alt="${product.name}"/></div>
+                        <div class="col-3"><img src="${noImageUrl(product.image_url)}" class="card-img-top" alt="${product.name}"/></div>
                         <div class="col-6"><h4>${product.name}</h4></div>
                         <div class="col-3">$${product.price}</div>
                     </div>

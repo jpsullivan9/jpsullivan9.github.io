@@ -62,7 +62,7 @@ const displayLandingPage = async (id) => {
     const subCats = await fetchSubCategories(true, cat.id);
     const homeContent = `
         <div class="row justify-content-md-center p-2">
-            <img class="img-fluid" src="${cat.image_url}" alt="Online commerce courtesy xcart"/>
+            <img class="img-fluid" src="${noImageUrl(cat.image_url)}" alt="Online commerce courtesy xcart"/>
         </div>
         <h2>${cat.name}</h2>
         <p>${cat.description}</p>
@@ -86,7 +86,7 @@ const displayCategories = (isListing, cardColl) => {
     const catHtml = cardColl.map(card => `
         <div class="col-sm-4 p-3">
             <div class="card" style="width: 18rem;" onclick="${isListing ? "displayListingPage" : "displayLandingPage"}('${card.id}');">
-                <img src="${card.image_url}" class="card-img-top" alt="${card.name}"/>
+                <img src="${noImageUrl(card.image_url)}" class="card-img-top" alt="${card.name}"/>
                 <div class="card-body">
                     <h5 class="card-title">${card.name}</h5>
                     <p class="card-text">${card.description?.substring(0, 50)}...</p>
