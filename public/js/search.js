@@ -15,12 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchForm = document.getElementById('searchForm');
     searchForm.addEventListener('submit', function(event) {
         event.preventDefault();
-        searchProducts(document.getElementById('searchQuery').value, document.getElementById('minPrice').value, document.getElementById('maxPrice').value);
+        const query = document.getElementById('searchQuery').value;
+        const minPrice = document.getElementById('minPrice').value;
+        const maxPrice = document.getElementById('maxPrice').value;
+        const minRating = document.getElementById('minRating').value;
+        searchProducts(query, minPrice, maxPrice, minRating);
     });
 });
 
-function searchProducts(query, minPrice = '', maxPrice = '') {
-    const queryParams = new URLSearchParams({ q: query, minPrice, maxPrice }).toString();
+function searchProducts(query, minPrice = '', maxPrice = '', minRating = '') {
+    const queryParams = new URLSearchParams({ q: query, minPrice, maxPrice, minRating }).toString();
     fetch(`/api/search?${queryParams}`)
         .then(response => response.json())
         .then(data => {
