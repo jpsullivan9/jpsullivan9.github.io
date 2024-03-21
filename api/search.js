@@ -10,7 +10,7 @@ const pool = new Pool({
 });
 
 module.exports = async (req, res) => {
-  const { q, minPrice, maxPrice, minRating } = req.query;
+  const { q, minPrice, maxPrice, minRating, sellerIds } = req.query;
   let queryParams = [`%${q}%`];
   let queryConditions = ["SIMILARITY(name, $1) > 0.3"]; // adjustable query threshold
 
@@ -29,13 +29,19 @@ module.exports = async (req, res) => {
     queryConditions.push(`average_review_score >= $${queryParams.length}`);
   }
 
+  if (sellerIds) {
+    const sellerIdArray = sellerIds.split(',').map(id => parseInt(id, 10));
+    queryParams.push(sellerIdArray);
+    queryConditions.push(`seller_id = ANY($${queryParams.length}::int[])`);
+  }
+
   let queryText = `SELECT *, SIMILARITY(name, $1) AS sml FROM products WHERE ${queryConditions.join(' AND ')} ORDER BY sml DESC`;
 
   try {
     const results = await pool.query(queryText, queryParams);
     if (results.rows.length > 0) {
       res.status(200).json(results.rows);
-    } else if (minPrice || maxPrice || minRating) {
+    } else if (minPrice || maxPrice || minRating || sellerIds) {
       res.json({ message: "No products found. Consider adjusting filters." });
     }
     else {

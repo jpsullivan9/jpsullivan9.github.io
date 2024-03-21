@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchQuery = params.get('q');
     const minPrice = params.get('minPrice') || '';
     const maxPrice = params.get('maxPrice') || '';
-
     document.getElementById('minPrice').value = minPrice;
     document.getElementById('maxPrice').value = maxPrice;
 
@@ -23,8 +22,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+function getSellerIds() {
+    const sellerSelect = document.getElementById('sellerSelect');
+    const selectedOptions = Array.from(sellerSelect.selectedOptions);
+    return selectedOptions.map(option => option.value);
+}
+
 function searchProducts(query, minPrice = '', maxPrice = '', minRating = '') {
-    const queryParams = new URLSearchParams({ q: query, minPrice, maxPrice, minRating }).toString();
+    const sellerSelect = document.getElementById('sellerSelect');
+    const selectedSellerIds = Array.from(sellerSelect.selectedOptions).map(option => option.value).join(',');
+    const queryParams = new URLSearchParams({
+        q: query,
+        minPrice,
+        maxPrice,
+        minRating,
+        sellerIds: selectedSellerIds
+    }).toString();
     fetch(`/api/search?${queryParams}`)
         .then(response => response.json())
         .then(data => {
