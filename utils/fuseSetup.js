@@ -20,7 +20,7 @@ async function setupFuse() {
     includeScore: true,
     threshold: 0.2,
     distance: 100,
-    minMatchCharLength: 2,
+    minMatchCharLength: 3,
   };
   fuse = new Fuse(names, options);
 }

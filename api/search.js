@@ -12,7 +12,7 @@ const pool = new Pool({
 module.exports = async (req, res) => {
   const { q, minPrice, maxPrice } = req.query;
   let queryParams = [`%${q}%`];
-  let queryConditions = ["SIMILARITY(name, $1) > 0.2"]; // adjustable query threshold
+  let queryConditions = ["SIMILARITY(name, $1) > 0.3"]; // adjustable query threshold
 
   if (minPrice) {
     queryParams.push(minPrice);
