@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const searchForm = document.getElementById('searchForm');
-    searchForm.addEventListener('submit', function (event) {
+    searchForm.addEventListener('submit', function(event) {
         event.preventDefault();
         searchProducts(document.getElementById('searchQuery').value, minPrice, maxPrice);
     });
