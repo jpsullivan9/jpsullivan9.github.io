@@ -30,7 +30,10 @@ module.exports = async (req, res) => {
     const results = await pool.query(queryText, queryParams);
     if (results.rows.length > 0) {
       res.status(200).json(results.rows);
-    } else {
+    } else if (minPrice || maxPrice) {
+      res.json({ message: "No products found. Consider adjusting filters." });
+    }
+    else {
       const suggestions = await getSuggestions(q);
       res.json({ suggestions });
     }

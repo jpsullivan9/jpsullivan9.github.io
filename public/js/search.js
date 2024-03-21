@@ -35,15 +35,18 @@ function searchProducts(query, minPrice = '', maxPrice = '') {
 
 function displaySearchResults(data) {
     const resultsContainer = document.getElementById('searchResults');
-    if (data.error) {
+    
+    if (data.message) {
+        resultsContainer.innerHTML = `<div>${data.message}</div>`;
+    } else if (data.error) {
         resultsContainer.textContent = data.error;
     } else if (data.length === 0) {
-        resultsContainer.innerHTML = `<div>No results found.</div>`;
+        resultsContainer.innerHTML = `<div>No products found. Try adjusting your search or filter settings.</div>`;
     } else {
         resultsContainer.innerHTML = data.map(product => `
             <div class="product" onclick="location.href='/pages/product.html?id=${product.id}'" style="cursor:pointer;">
                 <br>
-                <img src="${product.image_url}" alt="${product.name}" style="width:100px; height:100px; margin:auto; align-items:center; justify-content:center; display:flex;">
+                <img src="${product.image_url}" alt="${product.name}" style="width:100px; height:100px; display:block; margin:auto;">
                 <h2>${product.name}</h2>
                 <p>${product.description}</p>
                 <p>Price: $${product.price}</p>
