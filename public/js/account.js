@@ -40,13 +40,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const username = document.getElementById('signupUsername').value;
         const email = document.getElementById('signupEmail').value;
         const password = document.getElementById('signupPassword').value;
+        const phone = document.getElementById('signupPhone').value;
+        const isSellerBox = document.getElementById('signupIsSeller');
+        const isSeller = isSellerBox.checked;
 
         fetch('/api/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username, email, password }),
+            body: JSON.stringify({ username, email, password, phone, isSeller }),
         })
         .then(response => {
             if (!response.ok) {

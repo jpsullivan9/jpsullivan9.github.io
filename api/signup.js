@@ -10,14 +10,14 @@ const pool = new Pool({
 });
 
 module.exports = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, phone, isSeller } = req.body;
   const saltRounds = 10;
 
   try {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const result = await pool.query(
-      'INSERT INTO accounts(username, email, password_hash) VALUES($1, $2, $3) RETURNING user_id',
-      [username, email, hashedPassword]
+      'INSERT INTO accounts(username, email, password_hash, phone_number, is_seller) VALUES($1, $2, $3, $4, $5) RETURNING user_id',
+      [username, email, hashedPassword, phone, isSeller]
     );
 
     res.status(201).json({ userId: result.rows[0].user_id, message: "User successfully created." });
