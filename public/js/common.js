@@ -65,3 +65,5 @@ const getNoDescContent = (desc) => {
     }
     return desc;
 };
+
+module.exports = { getNoDescContent, getRandomImage, noImageUrl, buildHash, setHashForUrl, setActive }

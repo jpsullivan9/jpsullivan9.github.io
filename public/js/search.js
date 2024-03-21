@@ -40,9 +40,9 @@ function displaySearchResults(data) {
         resultsContainer.innerHTML = data.map(product => `
             <div class="product" onclick="location.href='/pages/product.html?id=${product.id}'" style="cursor:pointer;">
                 <br>
-                <img src="${noImageUrl(product.image_url)}" alt="${product.name}" style="width:100px; height:auto;">
+                <img src="${product.image_url}" alt="${product.name}" style="width:100px; height:auto;">
                 <h2>${product.name}</h2>
-                <p>${getNoDescContent(product.description)}</p>
+                <p>${product.description}</p>
                 <p>Price: $${product.price}</p>
             </div>
         `).join('');
