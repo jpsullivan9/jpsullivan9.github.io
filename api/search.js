@@ -12,29 +12,26 @@ const pool = new Pool({
 module.exports = async (req, res) => {
   const { q, minPrice, maxPrice } = req.query;
   let queryParams = [`%${q}%`];
-  let queryText = 'SELECT * FROM products WHERE name ILIKE $1';
+  let queryConditions = ["SIMILARITY(name, $1) > 0.2"]; // adjustable query threshold
 
   if (minPrice) {
     queryParams.push(minPrice);
-    queryText += ` AND price >= $${queryParams.length}`;
+    queryConditions.push(`price >= $${queryParams.length}`);
   }
 
   if (maxPrice) {
     queryParams.push(maxPrice);
-    queryText += ` AND price <= $${queryParams.length}`;
+    queryConditions.push(`price <= $${queryParams.length}`);
   }
+
+  let queryText = `SELECT *, SIMILARITY(name, $1) AS sml FROM products WHERE ${queryConditions.join(' AND ')} ORDER BY sml DESC`;
 
   try {
     const results = await pool.query(queryText, queryParams);
     if (results.rows.length > 0) {
       res.status(200).json(results.rows);
     } else {
-      const allProducts = await pool.query('SELECT name, price FROM products');
-      const filteredProducts = allProducts.rows.filter(product => {
-        const price = parseFloat(product.price);
-        return (!minPrice || price >= parseFloat(minPrice)) && (!maxPrice || price <= parseFloat(maxPrice));
-      });
-      const suggestions = await getSuggestions(q, filteredProducts.map(product => product.name));
+      const suggestions = await getSuggestions(q);
       res.json({ suggestions });
     }
   } catch (error) {
