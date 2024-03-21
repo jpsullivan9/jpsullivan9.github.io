@@ -10,35 +10,26 @@ const pool = new Pool({
 });
 
 module.exports = async (req, res) => {
-  const { q, minPrice, maxPrice, minRating } = req.query;
+  const { q, minPrice, maxPrice } = req.query;
   let queryParams = [`%${q}%`];
-  let queryConditions = ["SIMILARITY(name, $1) > 0.3"]; // adjustable query threshold
+  let queryText = 'SELECT * FROM products WHERE name ILIKE $1';
 
   if (minPrice) {
     queryParams.push(minPrice);
-    queryConditions.push(`price >= $${queryParams.length}`);
+    queryText += ` AND price >= $${queryParams.length}`;
   }
 
   if (maxPrice) {
     queryParams.push(maxPrice);
-    queryConditions.push(`price <= $${queryParams.length}`);
+    queryText += ` AND price <= $${queryParams.length}`;
   }
-
-  if (minRating) {
-    queryParams.push(minRating);
-    queryConditions.push(`average_review_score >= $${queryParams.length}`);
-  }
-
-  let queryText = `SELECT *, SIMILARITY(name, $1) AS sml FROM products WHERE ${queryConditions.join(' AND ')} ORDER BY sml DESC`;
 
   try {
     const results = await pool.query(queryText, queryParams);
     if (results.rows.length > 0) {
       res.status(200).json(results.rows);
-    } else if (minPrice || maxPrice || minRating) {
-      res.json({ message: "No products found. Consider adjusting filters." });
-    }
-    else {
+    } else {
+      // If no results, get suggestions
       const suggestions = await getSuggestions(q);
       res.json({ suggestions });
     }
