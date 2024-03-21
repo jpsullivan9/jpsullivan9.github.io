@@ -29,8 +29,12 @@ module.exports = async (req, res) => {
     if (results.rows.length > 0) {
       res.status(200).json(results.rows);
     } else {
-      // If no results, get suggestions
-      const suggestions = await getSuggestions(q);
+      const allProducts = await pool.query('SELECT name, price FROM products');
+      const filteredProducts = allProducts.rows.filter(product => {
+        const price = parseFloat(product.price);
+        return (!minPrice || price >= parseFloat(minPrice)) && (!maxPrice || price <= parseFloat(maxPrice));
+      });
+      const suggestions = await getSuggestions(q, filteredProducts.map(product => product.name));
       res.json({ suggestions });
     }
   } catch (error) {

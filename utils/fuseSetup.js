@@ -23,8 +23,8 @@ async function setupFuse() {
   fuse = new Fuse(names, options);
 }
 
-async function getSuggestions(query) {
-  if (!fuse) await setupFuse();
+async function getSuggestions(query, productNames) {
+  if (!fuse) await setupFuse(productNames);
   return fuse.search(query).map(result => result.item.name);
 }
 

@@ -1,8 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const searchQuery = params.get('q');
-    const minPrice = document.getElementById('minPrice').value;
-    const maxPrice = document.getElementById('maxPrice').value;
+    const minPrice = params.get('minPrice') || '';
+    const maxPrice = params.get('maxPrice') || '';
+
+    document.getElementById('minPrice').value = minPrice;
+    document.getElementById('maxPrice').value = maxPrice;
 
     if (searchQuery) {
         document.getElementById('searchQuery').value = searchQuery;
@@ -12,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchForm = document.getElementById('searchForm');
     searchForm.addEventListener('submit', function(event) {
         event.preventDefault();
-        searchProducts(document.getElementById('searchQuery').value, minPrice, maxPrice);
+        searchProducts(document.getElementById('searchQuery').value, document.getElementById('minPrice').value, document.getElementById('maxPrice').value);
     });
 });
 
@@ -53,7 +56,10 @@ function displaySuggestions(suggestions, originalQuery) {
     const resultsContainer = document.getElementById('searchResults');
     if (suggestions.length > 0) {
         const topSuggestion = suggestions[0];
-        resultsContainer.innerHTML = `<div>Did you mean: <a href="#" onclick="searchProducts('${topSuggestion}')">${topSuggestion}</a> instead of "${originalQuery}"?</div>`;
+        const minPrice = document.getElementById('minPrice').value;
+        const maxPrice = document.getElementById('maxPrice').value;
+        const suggestionSearchURL = `search.html?q=${encodeURIComponent(topSuggestion)}${minPrice ? '&minPrice=' + minPrice : ''}${maxPrice ? '&maxPrice=' + maxPrice : ''}`;
+        resultsContainer.innerHTML = `<div>Did you mean: <a href="${suggestionSearchURL}">${topSuggestion}</a> instead of "${originalQuery}"?</div>`;
     } else {
         resultsContainer.innerHTML = `<div>No matches found for "${originalQuery}".</div>`;
     }
