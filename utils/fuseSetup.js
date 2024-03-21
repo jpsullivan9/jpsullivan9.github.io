@@ -19,13 +19,16 @@ async function setupFuse() {
     keys: ['name'],
     includeScore: true,
     threshold: 0.2,
+    distance: 100,
+    minMatchCharLength: 3,
   };
   fuse = new Fuse(names, options);
 }
 
 async function getSuggestions(query) {
   if (!fuse) await setupFuse();
-  return fuse.search(query).map(result => result.item.name);
+  const results = fuse.search(query);
+  return results.map(result => result.item.name);
 }
 
 setupFuse().then(() => {
