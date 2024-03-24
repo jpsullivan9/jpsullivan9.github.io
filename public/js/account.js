@@ -53,12 +53,14 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Signup failed: ' + response.statusText);
+                return response.json().then(data => {
+                    throw new Error('Signup failed: ' + data.details);
+                });
             }
             return response.json();
         })
         .then(data => {
-            displayMessage('Signup successful: Welcome ' + data.username);
+            displayMessage('Signup successful: Welcome ' + username);
         })
         .catch(error => {
             displayMessage('Signup Error: ' + error.message, true);
