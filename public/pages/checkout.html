@@ -8,11 +8,25 @@
 
 <body>
     <h1> Checkout </h1>
-    <h2> Billing Details</h2>
+    <h2> Shipping Address</h2>
+    <section class = "component">
+        <div id = "shipping details">
+            <form id = "shippingAddress">
+                    <input type = "text" id = "NAME" placeholder ="NAME">
+                    <input type = "text" id = "ADDRESS" placeholder = "ADDRESS">
+                    <input type = "text" id = "CITY" placeholder = "CITY">
+                    <input type = "text" id = "STATE" placeholder = "STATE">
+                    <input type = "text" id = "Country" placeholder = "COUNTRY">
+                    <input type = "number" id = "phone number" placeholder = "PHONE NUMBER">
+                    <input type = "text" id = "email address" placeholder = "EMAIL ADDRESS">
+            </form>
+        </div>
+
+    </section>
     <section class = "component">
     <div class = "total">
         <h2> Credit Card </h2>
-        <form>
+        <form id = "creditCardDetails">
             <input type = "text" id = "NAME" placeholder ="NAME">
             <input type = "number" id = "CARDNUMBER" placeholder = "CARDNUMBER">
             <input type = "number" id = "EXPIRATION" placeholder = "EXPIRATION">
@@ -23,6 +37,7 @@
     <button type = "submit" class = "valid-button"> PROCEED TO CHECKOUT </button>
     </form>
 </section>
+<script src = "../js/checkout.js"></script>
 </body>
 
 </html>
