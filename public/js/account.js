@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
-            displayMessage('Login successful: Welcome ' + data.username);
+            window.location.href = '/';
         })
         .catch(error => {
             displayMessage('Login Error: ' + error.message, true);
