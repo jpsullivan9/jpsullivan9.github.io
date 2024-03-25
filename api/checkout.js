@@ -1,66 +1,84 @@
-
-const { Pool } = require("pg");
 require("dotenv").config();
+const apiKey = process.env.SECRET_KEY;
+const stripe = require('stripe')(apiKey);
+const domain  = 'https://rutgers-swe-project.vercel.app/';
+const apiURL  = 'https://api.stripe.com/v1' ;
+const openurl = require('openurl');
 
-const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
+//const button = document.querySelector("button")
 
- module.exports = async (req, res) => {
-  const {email, shippingAddress, productID} = await req.query;
-//(async () => {
-   //const res = await fetch('https://swep-roject.vercel.app/pages/checkout.html');
-  try{ 
-   
-   // const email = 'sull@gmail.com';
-   if(email == undefined || shippingAddress == undefined || productID == undefined){
-    res.status(400).json({message : "Not enough information"});
-   }
-    const {rows} = await pool.query('SELECT user_id FROM accounts WHERE email = $1', [email]);
-  if(rows.length > 0 ){
-    const status = "confirmed"; 
-    //const productID = '1234';
-    //const shippingAddress = "123 Street"
-    const {orders} = await pool.query(`SELECT user_id FROM orders WHERE order_id = $1`, [productID]);
-    //console.log(orders);
+async function createProduct(name){
+    try {
+        const response = await fetch(`${apiURL}/products`, {
+            method : 'POST',
+            headers: {
 
-    if(orders != undefined){
-      //console.log('cannot add order');
-      res.status(400).json({error : "Order has already been placed"});
+                'Authorization' : `Bearer ${apiKey}`,
+                'Content-Type' : 'application/x-www-form-urlencoded',
+            },
+            body : `name=${name}&type=service`
+        });
+        const product = await response.json();
+        return product;
+    }catch (err) {
+        console.error('error creating product', err);
+        throw err;
     }
-    else{
-    const result = await pool.query('INSERT INTO orders (user_id,  order_id, shipping_address, status) VALUES ($1, $2, $3, $4)', [rows[0].user_id, productID, shippingAddress, status]);
-      
-   res.status(200).json({message : "Order successfully created"});
-  }
-  }
- 
-}catch (error){
- // console.error("Failure placing order", error);
-  
-  res.status(500).json({messaage : "Failure placing order", details : error.message});
-}
- };
-
-//})();
-
-//}
-/*
-const {name, emailAddress} = req.body;
-const makePayment = async () =>{
-  const body = item; //sample item
-  const header = {'Content-type'  : 'application/json'};
-  const response  = await fetch(`{apiURL}/create-checkout-session`, {
-
-    method : "POST",
-    header : header,
-    body : JSON.stringify(body)
-  })
-
-  const session = await response.json();
 
 }
-*/
+
+async function addPrice(productID, amount){
+    try{
+        const response = await fetch(`${apiURL}/prices`, {
+            method : "POST",
+            headers : {
+                'Authorization' : `Bearer ${apiKey}`,
+                'Content-Type' : 'application/x-www-form-urlencoded',
+            },
+            body : `unit_amount=${amount}&product=${productID}&currency=usd`,
+
+        });
+        console.log(response);
+
+        const price = await response.json();
+        return price;
+    }catch (err) {
+        console.error('error adding price', err);
+        throw err;
+    }
+
+}
+
+async function createPaymentLink(priceID){
+    try{
+        const response = await fetch(`${apiURL}/checkout/sessions`, {
+            method : 'POST',
+            headers : {
+                'Authorization' : `Bearer ${apiKey}`,
+                'Content-Type' : 'application/x-www-form-urlencoded'
+            },
+            body : `mode=payment&payment_method_types[0]=card&success_url=https://google.com&cancel_url=${domain}/pages/checkout.html&line_items[0][price]=${priceID}&line_items[0][quantity]=1`
+        });
+        console.log(response);
+        const session = await response.json();
+        return session.url;
+    } catch (err) {
+        console.error('error making payment link', err);
+        throw err;
+
+    }
+
+}
+( async () =>{
+    try {
+        let name  = "coffee";
+        var product = await createProduct(name);
+        console.log(product);
+        const price = await addPrice(product.id, 1000);
+        console.log(price);
+        const paymentLink = await createPaymentLink(price.id);
+        console.log(paymentLink);
+    }catch (err) {
+        console.error('error' , err);
+    }
+})();
