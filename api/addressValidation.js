@@ -1,8 +1,7 @@
 const EasyPost = require('@easypost/api');
 const client = new EasyPost(process.env.EasyPost_SECRET_KEY);
 require("dotenv").config();
-
-//hardcoding for the sake of testing, will change later
+/*
 const addressParams = {
     verify: true,
     street1: '1353 Stelton Rd',
@@ -13,9 +12,23 @@ const addressParams = {
     email: 'fourseasonsthai@gmail.com',
     phone: '+49 497 310 2759'
 };
-
+*/
 module.exports = async (req, res) =>{
+   const {street1, city, state, zip, country, email, phone} = req.query;
+   const addressParams = {
+    verify: true,
+    street1: street1,
+    city: city,
+    state: state,
+    zip: zip,
+    country: country,
+    email: email,
+    phone: phone
+   };
 
+    if(street1 == undefined || city == undefined || state == undefined || zip == undefined || country == undefined){
+    res.status(400).json({message : "not enough information"});
+    }
     try{
         
         await client.Address.create(addressParams)
