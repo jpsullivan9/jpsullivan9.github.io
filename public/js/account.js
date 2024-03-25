@@ -29,6 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             window.location.href = '/';
+            let token = data.token;
+            localStorage.setItem('token',token);
         })
         .catch(error => {
             displayMessage('Login Error: ' + error.message, true);
