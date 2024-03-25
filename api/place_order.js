@@ -41,6 +41,8 @@ const pool = new Pool({
       
    res.status(200).json({message : "Order successfully created" });
   }
+  } else{
+    res.status(400).json({message : 'invalid email'});
   }
  
 }catch (error){
@@ -50,3 +52,22 @@ const pool = new Pool({
 }
  };
 
+//})();
+
+//}
+/*
+const {name, emailAddress} = req.body;
+const makePayment = async () =>{
+  const body = item; //sample item
+  const header = {'Content-type'  : 'application/json'};
+  const response  = await fetch(`{apiURL}/create-checkout-session`, {
+
+    method : "POST",
+    header : header,
+    body : JSON.stringify(body)
+  })
+
+  const session = await response.json();
+
+}
+*/
