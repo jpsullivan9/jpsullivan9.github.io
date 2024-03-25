@@ -1,10 +1,6 @@
-require("dotenv").config();
+
 const { Pool } = require("pg");
-const bcrypt = require("bcrypt");
-const apiKey = process.env.SECRET_KEY;
-const stripe = require('stripe')(apiKey);
-const domain  = 'https://rutgers-swe-project.vercel.app/';
-const apiURL  = 'https://api.stripe.com/' ;
+require("dotenv").config();
 
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
@@ -14,14 +10,14 @@ const pool = new Pool({
 });
 
  module.exports = async (req, res) => {
-  const {email, shippingAddress, productID} = req.query;
+  const {email, shippingAddress, productID} = await req.query;
 //(async () => {
    //const res = await fetch('https://swep-roject.vercel.app/pages/checkout.html');
   try{ 
    
    // const email = 'sull@gmail.com';
-   if(email != undefined && shippingAddress != undefined && productID != undefined){
-    res.status(200).json("found stuff")
+   if(email == undefined || shippingAddress == undefined || productID == undefined){
+    res.status(400).json({message : "Not enough information"});
    }
     const {rows} = await pool.query('SELECT user_id FROM accounts WHERE email = $1', [email]);
   if(rows.length > 0 ){
@@ -32,7 +28,7 @@ const pool = new Pool({
     //console.log(orders);
 
     if(orders != undefined){
-      console.log('cannot add order');
+      //console.log('cannot add order');
       res.status(400).json({error : "Order has already been placed"});
     }
     else{
@@ -43,7 +39,7 @@ const pool = new Pool({
   }
  
 }catch (error){
-  console.error("Failure placing order", error);
+ // console.error("Failure placing order", error);
   
   res.status(500).json({messaage : "Failure placing order", details : error.message});
 }
@@ -68,4 +64,3 @@ const makePayment = async () =>{
 
 }
 */
-
