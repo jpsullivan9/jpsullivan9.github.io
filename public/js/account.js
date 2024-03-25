@@ -2,7 +2,43 @@ document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
     const messageBox = document.getElementById('messageBox');
-
+    const logoutBtn = document.getElementById('logoutBtn');
+    const authFormsContainer = document.getElementById('authForms');
+    function checkLoggedIn() {
+        const token = localStorage.getItem('token');
+        if (token) {
+            fetch('/api/userTokenInfo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ token }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    authFormsContainer.style.display = 'block'; 
+                    logoutBtn.style.display = 'none';
+                }
+                return response.json();
+            })
+            .then(data => {
+                // User is logged in
+                displayMessage('Do you want to logout, '+data.username+'?', false);
+                authFormsContainer.style.display = 'none'; // Hide login/signup forms
+                logoutBtn.style.display = 'block'; // Show logout button
+            })
+            .catch(error => {
+                displayMessage('Token Error: ' + error.message, true);
+                authFormsContainer.style.display = 'block';
+                logoutBtn.style.display = 'none'; 
+            });
+        } else {
+            // User is not logged in
+            authFormsContainer.style.display = 'block';
+            logoutBtn.style.display = 'none'; 
+        }
+    }
+    checkLoggedIn();
     function displayMessage(message, isError = false) {
         messageBox.textContent = message;
         messageBox.style.color = isError ? 'red' : 'green';
@@ -67,5 +103,10 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             displayMessage('Signup Error: ' + error.message, true);
         });
+    });
+    logoutBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        localStorage.removeItem('token');
+        window.location.href = '/';
     });
 });
