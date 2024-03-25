@@ -1,11 +1,8 @@
 require("dotenv").config();
 const apiKey = process.env.SECRET_KEY;
 const stripe = require('stripe')(apiKey);
-const domain  = 'https://rutgers-swe-project.vercel.app/';
 const apiURL  = 'https://api.stripe.com/v1' ;
-const openurl = require('openurl');
 
-//const button = document.querySelector("button")
 
 async function createProduct(name){
     try {
@@ -25,7 +22,7 @@ async function createProduct(name){
         throw err;
     }
 
-}
+};
 
 async function addPrice(productID, amount){
     try{
@@ -38,8 +35,6 @@ async function addPrice(productID, amount){
             body : `unit_amount=${amount}&product=${productID}&currency=usd`,
 
         });
-        console.log(response);
-
         const price = await response.json();
         return price;
     }catch (err) {
@@ -47,7 +42,7 @@ async function addPrice(productID, amount){
         throw err;
     }
 
-}
+};
 
 async function createPaymentLink(priceID){
     try{
@@ -59,8 +54,9 @@ async function createPaymentLink(priceID){
             },
             body : `mode=payment&payment_method_types[0]=card&success_url=https://google.com&cancel_url=${domain}/pages/checkout.html&line_items[0][price]=${priceID}&line_items[0][quantity]=1`
         });
-        console.log(response);
+        //console.log(response);
         const session = await response.json();
+       // console.log(session);
         return session.url;
     } catch (err) {
         console.error('error making payment link', err);
@@ -68,17 +64,29 @@ async function createPaymentLink(priceID){
 
     }
 
-}
-( async () =>{
+};
+
+   (async () => {
+  
     try {
+
         let name  = "coffee";
         var product = await createProduct(name);
-        console.log(product);
-        const price = await addPrice(product.id, 1000);
-        console.log(price);
+       //console.log(product);
+     const price = await addPrice(product.id, 1000);
+       //console.log(price);
         const paymentLink = await createPaymentLink(price.id);
-        console.log(paymentLink);
+        if(paymentLink != undefined){
+        //res.status(200).json({payment : paymentLink, messgae : 'continue to payment'});
+       console.log(`Payment Link : ${paymentLink}`);
+        }else{
+            //res.status(400).json({message: "failure to create payment link"});
+           console.log('failure to make payment link');
+        }
+        //console.log(paymentLink);
     }catch (err) {
         console.error('error' , err);
     }
+
+//};
 })();
