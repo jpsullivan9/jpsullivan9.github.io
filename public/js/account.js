@@ -16,8 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => {
                 if (!response.ok) {
+                    //Token invalid
                     authFormsContainer.style.display = 'block'; 
                     logoutBtn.style.display = 'none';
+                    localStorage.removeItem('token');//clear bad token
                 }
                 return response.json();
             })
@@ -28,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 logoutBtn.style.display = 'block'; // Show logout button
             })
             .catch(error => {
+                //Error in reading token
                 displayMessage('Token Error: ' + error.message, true);
                 authFormsContainer.style.display = 'block';
                 logoutBtn.style.display = 'none'; 
