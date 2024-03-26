@@ -190,32 +190,51 @@
     <div class="cart-container">
         <div class="subtotal">
             <h2>Subtotal</h2>
-            <p>Total Items: 2</p>
-            <p>Total Price: $50.00</p>
-           
+            <p>Total Items: <span id="totalItems">0</span></p>
+            <p>Total Price: $<span id="totalPrice">0.00</span></p>
         </div>
-        
     </div>
 
-    <script src="../js/cart.js"></script>
-    
     <div class="hero">
         <div class="row">
             <p>Products</p>
-            <label>
-                <input type="checkbox" checked="checked"> 
-                Product 1
+            <label for="product1">
+                <input type="checkbox" id="product1" onchange="updateTotal()"> 
+                Product 1 - $20
             </label>
-            <label>
-                <input type="checkbox" checked="checked"> 
-                Product 2
+            <label for="product2">
+                <input type="checkbox" id="product2" onchange="updateTotal()"> 
+                Product 2 - $10
             </label>
-            <label>
-                <input type="checkbox" checked="checked"> 
-                Product 3
+            <label for="product3">
+                <input type="checkbox" id="product3" onchange="updateTotal()"> 
+                Product 3 - $15
             </label>
         </div>
     </div>
+
+    <script>
+        function updateTotal() {
+            var totalItems = 0;
+            var totalPrice = 0;
+            
+            if (document.getElementById('product1').checked) {
+                totalItems++;
+                totalPrice += 20;
+            }
+            if (document.getElementById('product2').checked) {
+                totalItems++;
+                totalPrice += 10;
+            }
+            if (document.getElementById('product3').checked) {
+                totalItems++;
+                totalPrice += 15;
+            }
+            
+            document.getElementById('totalItems').textContent = totalItems;
+            document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
+        }
+    </script>
     
     <a href="checkout.html" class="checkout-button">Proceed to Checkout</a>
 </body>
