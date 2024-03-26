@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const messageBox = document.getElementById('messageBox');
     const logoutBtn = document.getElementById('logoutBtn');
     const authFormsContainer = document.getElementById('authForms');
+    const qrCodeContainer = document.getElementById('qrImage');
+    const imgElement = document.createElement('img');
+
     function checkLoggedIn() {
         const token = localStorage.getItem('token');
         if (token) {
@@ -18,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!response.ok) {
                     //Token invalid
                     authFormsContainer.style.display = 'block'; 
-                    logoutBtn.style.display = 'none';
+                    logoutStuff.style.display = 'none';
                     localStorage.removeItem('token');//clear bad token
                 }
                 return response.json();
@@ -27,20 +30,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 // User is logged in
                 displayMessage('Do you want to logout, '+data.username+'?', false);
                 authFormsContainer.style.display = 'none'; // Hide login/signup forms
-                logoutBtn.style.display = 'block'; // Show logout button
+                logoutStuff.style.display = 'block'; // Show logout button
+
             })
             .catch(error => {
                 //Error in reading token
                 displayMessage('Token Error: ' + error.message, true);
                 authFormsContainer.style.display = 'block';
-                logoutBtn.style.display = 'none'; 
+                logoutStuff.style.display = 'none'; 
             });
         } else {
             // User is not logged in
             authFormsContainer.style.display = 'block';
-            logoutBtn.style.display = 'none'; 
+            logoutStuff.style.display = 'none'; 
         }
     }
+
     checkLoggedIn();
     function displayMessage(message, isError = false) {
         messageBox.textContent = message;
@@ -112,4 +117,55 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.removeItem('token');
         window.location.href = '/';
     });
+
+    // Create QR code
+    enable2FAButton.addEventListener('click', async () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            fetch('/api/userTokenInfo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ token }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Token verification failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const username = data.username;
+                const userId = data.userId;
+                fetch('/api/getQRCode', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({username, userId}),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('QR generation failed.');
+                    }
+                    return response.json();
+            })
+            .then(data => {
+                const qrcode = data.image;
+                imgElement.src = qrcode;
+                qrCodeContainer.appendChild(imgElement);
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+            });
+            
+        })
+            .catch(error => {
+                console.error('Error:', error.message);
+            });
+        } else {
+            console.error('No token found');
+        }
+    }); 
 });

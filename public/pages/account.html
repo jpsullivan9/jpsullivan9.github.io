@@ -34,7 +34,20 @@
                 <button type="submit">Signup</button>
             </form>
         </div>
-        <button id="logoutBtn" style="display: none;">Logout</button>
+
+        <div id="logoutStuff" style="display: none;">
+            <button id="logoutBtn">Logout</button>
+            <div>
+            <button id="enable2FAButton" class="btn btn-success">UPDATE/ENABLE 2FA</button>
+                <br> <br> <br>
+                <img id="qrImage" height="300" width="300"/>
+                <form id="twoFAUpdateForm">
+                    <input type="text" name="code" placeholder="Code" class="form-control"/>
+                    <button id="set" class="btn btn-primary" type="submit">SET</button>
+                </form>
+            </div>
+        </div>
+
     </div>
 
     <script src="../js/account.js"> </script>
