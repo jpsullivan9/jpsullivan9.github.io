@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoutBtn = document.getElementById('logoutBtn');
     const authFormsContainer = document.getElementById('authForms');
     const qrCodeContainer = document.getElementById('qrImage');
-    const imgElement = document.createElement('img');
 
     function checkLoggedIn() {
         const token = localStorage.getItem('token');
@@ -146,15 +145,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: JSON.stringify({username, userId}),
                 })
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error('QR generation failed.');
+                     if (!response.ok) {
+                        throw new Error(response.json().error);
                     }
                     return response.json();
             })
             .then(data => {
                 const qrcode = data.image;
-                imgElement.src = qrcode;
-                qrCodeContainer.appendChild(imgElement);
+                qrCodeContainer.src = qrcode;
+               
             })
             .catch(error => {
                 console.error('Error:', error.message);
