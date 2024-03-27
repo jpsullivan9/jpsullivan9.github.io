@@ -1,11 +1,6 @@
 
 const { Pool } = require("pg");
 require("dotenv").config();
-const bcrypt = require("bcrypt");
-const apiKey = process.env.SECRET_KEY;
-const stripe = require('stripe')(apiKey);
-const domain  = 'https://rutgers-swe-project.vercel.app/';
-const apiURL  = 'https://api.stripe.com/' ;
 
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
@@ -52,22 +47,4 @@ const pool = new Pool({
 }
  };
 
-//})();
 
-//}
-/*
-const {name, emailAddress} = req.body;
-const makePayment = async () =>{
-  const body = item; //sample item
-  const header = {'Content-type'  : 'application/json'};
-  const response  = await fetch(`{apiURL}/create-checkout-session`, {
-
-    method : "POST",
-    header : header,
-    body : JSON.stringify(body)
-  })
-
-  const session = await response.json();
-
-}
-*/
