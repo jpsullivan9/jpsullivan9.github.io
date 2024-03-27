@@ -32,6 +32,15 @@ module.exports = async (req, res) => {
       res.status(501).json({ error: "Username, email or phone is already in use", details: 'Field(s): '+fieldString+' are already in use'});
     }
     else{
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          return res.status(400).json({error: "Invalid email format", details: "Please provide a valid email address"});
+        }
+
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(phone)) {
+          return res.status(400).json({error: "Invalid phone number format", details: "Phone number must be 10 digits long."});
+        }
 
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         const result = await pool.query(

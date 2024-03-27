@@ -20,15 +20,18 @@
                 <input type="email" id="loginEmail" placeholder="Email" required>
                 <input type="password" id="loginPassword" placeholder="Password" required>
                 <button type="submit">Login</button>
-                <input type="checkbox" onclick="myFunction()">Show Password
+                <input type="checkbox" onclick="showLoginPass()">Show Password
             </form>
 
             <h2>Signup</h2>
             <form id="signupForm">
                 <input type="text" id="signupUsername" placeholder="Username" required>
                 <input type="email" id="signupEmail" placeholder="Email" required>
+                <br>
                 <input type="tel" id="signupPhone" placeholder="Phone Number" required>
                 <input type="password" id="signupPassword" placeholder="Password" required>
+                <input type="checkbox" onclick="showRegPass()">Show Password
+                <br>
                 <label for="signupIsSeller">Are you a seller?</label>
                 <input type="checkbox" id="signupIsSeller">
                 <button type="submit">Signup</button>
@@ -53,8 +56,17 @@
     <script src="../js/account.js"> </script>
 
     <script>
-        function myFunction() {
+        function showLoginPass() {
             var x = document.getElementById("loginPassword");
+            if (x.type === "password") {
+              x.type = "text";
+            } else {
+              x.type = "password";
+            }
+          }
+
+        function showRegPass() {
+            var x = document.getElementById("signupPassword");
             if (x.type === "password") {
               x.type = "text";
             } else {
