@@ -85,3 +85,23 @@ function displaySuggestions(suggestions, originalQuery) {
         resultsContainer.innerHTML = `<div>No matches found for "${originalQuery}".</div>`;
     }
 }
+function fetchCategories(){
+fetch('/category.js')
+  .then(response => response.json())
+  .then(categories => {
+    // Process categories data
+  })
+  .catch(error => {
+    console.error('Error fetching categories:', error);
+  });
+}
+  fetch(`your_api_endpoint?q=query&minPrice=${minPrice}&maxPrice=${maxPrice}&category=${selectedCategory}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+
+  
