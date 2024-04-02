@@ -8,7 +8,7 @@ const pool = new Pool({
     }
 });
 
-module.exports = async (req, res) => {
+const getCategories = async (req, res) => {
     try {
         const { id } = req.query;
         if (id) {
@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
             if (rows.length > 0) {
                 res.status(200).json(rows[0]);
             } else {
-                res.status(404).json({ error: 'Product not found' });
+                res.status(404).json({ error: 'Category not found' });
             }
         } else {
             // Fetch only featured products
@@ -31,3 +31,5 @@ module.exports = async (req, res) => {
         res.status(500).json({ error: 'Database query failed', details: error.message });
     }
 };
+
+module.exports = getCategories;

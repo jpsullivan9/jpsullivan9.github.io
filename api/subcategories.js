@@ -8,7 +8,7 @@ const pool = new Pool({
     }
 });
 
-module.exports = async (req, res) => {
+const getSubCategories = async (req, res) => {
     try {
         const { id, catId } = req.query;
         if (id) {
@@ -31,3 +31,5 @@ module.exports = async (req, res) => {
         res.status(500).json({ error: "Database query failed", details: error.message });
     }
 };
+
+module.exports = getSubCategories;

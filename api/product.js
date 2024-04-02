@@ -8,7 +8,7 @@ const pool = new Pool({
     }
 });
 
-module.exports = async (req, res) => {
+const products_home = async (req, res) => {
     try {
         const { id, featured, subCat } = req.query;
         if (id) {
@@ -36,3 +36,5 @@ module.exports = async (req, res) => {
         res.status(500).json({ error: 'Database query failed', details: error.message });
     }
 };
+
+module.exports = products_home;
