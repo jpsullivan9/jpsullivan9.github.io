@@ -1,8 +1,18 @@
 require("dotenv").config();
 const apiKey = process.env.SECRET_KEY;
 const stripe = require('stripe')(apiKey);
-const apiURL  = 'https://api.stripe.com/v1' ;
+const domain  = 'https://rutgers-swe-project.vercel.app/';
+const apiURL  = 'https://api.stripe.com/v1';
+let isValidAddress= false;
+console.log(process.env.SECRET_KEY);
+const { Pool } = require("pg");
 
+const pool = new Pool({
+    connectionString: process.env.POSTGRES_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
+  });
 
 async function createProduct(name){
     try {
@@ -35,6 +45,8 @@ async function addPrice(productID, amount){
             body : `unit_amount=${amount}&product=${productID}&currency=usd`,
 
         });
+       // console.log(response);
+
         const price = await response.json();
         return price;
     }catch (err) {
@@ -66,14 +78,61 @@ async function createPaymentLink(priceID){
 
 };
 
+/*
+client.Address.create(addressParams)
+    .then(address => {
+        console.log(address);
+        if (address.verifications && address.verifications.delivery && address.verifications.delivery.success) {
+           isValidAddress= true;
+            console.log('Address verified successfully');
+        } else {
+            console.log('Address verification failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error creating address:', error);
+    });
+*/
+//const button = document.querySelector("button")
+
+/*
+async function checkAddress(addressParams){
+    client.Address.create(addressParams)
+    .then(address => {
+       // console.log(address);
+        if (address.verifications && address.verifications.delivery && address.verifications.delivery.success) {
+           isValidAddress= true;
+          console.log('Address verification success');
+            //res.status(200).json({message : 'address verified successfully'});
+        } else {
+            //res.status(400).json*({message : 'address verification failed'});
+            console.log('Address verification failed');
+        }
+    })
+    .catch(error => {
+        res.status(500).json({message :  'error creating address', details : error.message});
+        console.error('Error creating address:', error);
+    });
+
+}
+*/
+//module.exports = async (req, res) =>{
+  //  res.status(200);
    (async () => {
   
     try {
 
-        let name  = "coffee";
+        let name  = "Coffee Mug";
+        const {rows} = await pool.query('SELECT price FROM products WHERE name = $1', [name]);
+
+            const objValues = Object.values(rows[0]);
+            console.log(rows[0]);
+            console.log(objValues[0]);
+            
+
         var product = await createProduct(name);
        //console.log(product);
-     const price = await addPrice(product.id, 1000);
+     const price = await addPrice(product.id, objValues[0]*100);
        //console.log(price);
         const paymentLink = await createPaymentLink(price.id);
         if(paymentLink != undefined){
