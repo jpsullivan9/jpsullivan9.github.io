@@ -1,6 +1,8 @@
 
 const { Pool } = require("pg");
 require("dotenv").config();
+const apiKey = process.env.SECRET_KEY;
+const stripe = require('stripe')(apiKey);
 
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
@@ -34,10 +36,10 @@ const pool = new Pool({
     else{
     const result = await pool.query('INSERT INTO orders (user_id,  order_id, shipping_address, status, total_price) VALUES ($1, $2, $3, $4, $5)', [rows[0].user_id, productID, shippingAddress, status, subtotal]);
       
-   res.status(200).json({message : "Order successfully created" });
+   res.status(201).json({message : "Order successfully created", totalPrice : total_price, status : status, orderID : order_id});
   }
   } else{
-    res.status(400).json({message : 'invalid email'});
+    res.status(404).json({message : 'Email Not Found'});
   }
  
 }catch (error){
@@ -46,5 +48,4 @@ const pool = new Pool({
   res.status(500).json({messaage : "Failure placing order", details : error.message});
 }
  };
-
 

@@ -1,8 +1,16 @@
 require("dotenv").config();
 const apiKey = process.env.SECRET_KEY;
 const stripe = require('stripe')(apiKey);
-const apiURL  = 'https://api.stripe.com/v1' ;
+const apiURL  = 'https://api.stripe.com/v1';
+let isValidAddress= false;
+const { Pool } = require("pg");
 
+const pool = new Pool({
+    connectionString: process.env.POSTGRES_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
+  });
 
 async function createProduct(name){
     try {
@@ -35,6 +43,8 @@ async function addPrice(productID, amount){
             body : `unit_amount=${amount}&product=${productID}&currency=usd`,
 
         });
+       // console.log(response);
+
         const price = await response.json();
         return price;
     }catch (err) {
@@ -70,10 +80,17 @@ async function createPaymentLink(priceID){
   
     try {
 
-        let name  = "coffee";
+        let name  = "Coffee Mug";
+        const {rows} = await pool.query('SELECT price FROM products WHERE name = $1', [name]);
+
+            const objValues = Object.values(rows[0]);
+            console.log(rows[0]);
+            console.log(objValues[0]);
+            
+
         var product = await createProduct(name);
        //console.log(product);
-     const price = await addPrice(product.id, 1000);
+     const price = await addPrice(product.id, objValues[0]*100);
        //console.log(price);
         const paymentLink = await createPaymentLink(price.id);
         if(paymentLink != undefined){
@@ -88,5 +105,4 @@ async function createPaymentLink(priceID){
         console.error('error' , err);
     }
 
-//};
 })();

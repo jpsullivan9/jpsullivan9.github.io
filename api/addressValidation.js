@@ -1,6 +1,6 @@
+require("dotenv").config();
 const EasyPost = require('@easypost/api');
 const client = new EasyPost(process.env.EasyPost_SECRET_KEY);
-require("dotenv").config();
 /*
 const addressParams = {
     verify: true,
