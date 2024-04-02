@@ -1,10 +1,8 @@
 require("dotenv").config();
 const apiKey = process.env.SECRET_KEY;
 const stripe = require('stripe')(apiKey);
-const domain  = 'https://rutgers-swe-project.vercel.app/';
 const apiURL  = 'https://api.stripe.com/v1';
 let isValidAddress= false;
-console.log(process.env.SECRET_KEY);
 const { Pool } = require("pg");
 
 const pool = new Pool({
@@ -78,46 +76,6 @@ async function createPaymentLink(priceID){
 
 };
 
-/*
-client.Address.create(addressParams)
-    .then(address => {
-        console.log(address);
-        if (address.verifications && address.verifications.delivery && address.verifications.delivery.success) {
-           isValidAddress= true;
-            console.log('Address verified successfully');
-        } else {
-            console.log('Address verification failed');
-        }
-    })
-    .catch(error => {
-        console.error('Error creating address:', error);
-    });
-*/
-//const button = document.querySelector("button")
-
-/*
-async function checkAddress(addressParams){
-    client.Address.create(addressParams)
-    .then(address => {
-       // console.log(address);
-        if (address.verifications && address.verifications.delivery && address.verifications.delivery.success) {
-           isValidAddress= true;
-          console.log('Address verification success');
-            //res.status(200).json({message : 'address verified successfully'});
-        } else {
-            //res.status(400).json*({message : 'address verification failed'});
-            console.log('Address verification failed');
-        }
-    })
-    .catch(error => {
-        res.status(500).json({message :  'error creating address', details : error.message});
-        console.error('Error creating address:', error);
-    });
-
-}
-*/
-//module.exports = async (req, res) =>{
-  //  res.status(200);
    (async () => {
   
     try {
@@ -147,5 +105,4 @@ async function checkAddress(addressParams){
         console.error('error' , err);
     }
 
-//};
 })();
