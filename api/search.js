@@ -42,11 +42,11 @@ module.exports = async (req, res) => {
     if (results.rows.length > 0) {
       res.status(200).json(results.rows);
     } else if (minPrice || maxPrice || minRating || sellerIds) {
-      res.json({ message: "No products found. Consider adjusting filters." });
+      res.status(200).json({ message: "No products found. Consider adjusting filters." });
     }
     else {
       const suggestions = await getSuggestions(q);
-      res.json({ suggestions });
+      res.status(200).json({ message: "No direct matches found. Suggestions:", suggestions });
     }
   } catch (error) {
     console.error('Database query error:', error);
