@@ -1,10 +1,240 @@
-<head>
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Anzom Cart</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/common.css">
+
+    <style>
+        /* Additional styles specific to page */
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            color: #333; 
+            font-size: 24px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .checkout-button {
+            display: block;
+            width: 200px;
+            margin: 30px 30px 30px auto;
+            padding: 15px;
+            background-color: #EC7D19; 
+            color: #fff; 
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+        }
+        .checkout-button:hover {
+            background-color: #ff6600; 
+        }
+        .checkout-button:active {
+            background-color: #dc5800; 
+        }
+
+        /* Creates alert, edit as notifications for changes in cart*/
+        div.alert {
+            opacity: 1;
+            transition: opacity 0.6s; /* 600ms to fade out */
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            text-align: center;
+            text-decoration: none;
+            color: #EC7D19;
+            background-color: #f2f2f2;
+            padding: 50px;
+            font-size: 20px;
+        }
+
+        /* style for check boxes */
+        .hero {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: left;
+        }
+
+        /* .container {
+            width: 50px;
+            padding: 25px;
+            border: 2px solid #999;
+            border-radius: 15px;
+        } */
+
+        .cart-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+        
+    </style>
+
+<meta charset="utf-8" />
+
+<!-- Favicons -->
+<link rel="icon" href="favicon.ico" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#000000" />
+<meta name="description" content="Online Store" />
+<meta name="author" content="" />
+
+
+<link rel="manifest" href="manifest.json" />
+
+<title>&copy; Anzom</title>
+<!-- Bootstrap core CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link rel="stylesheet" href="css/common.css">
 </head>
 
 <body>
-    <h1>INSERT CART INFO HERE.</h1>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <nav class="navbar"></nav>
+    <nav class="navbar"></nav>
+    <nav class="navbar"></nav>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+       
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">
+                <img src="/img/logo-small.png" alt="Anzom" />  </a>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+               
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a id="homeLnk" class="nav-link" href="#" onclick="showHome(this);">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pages/account.html">Log In/Sign Up</a>
+                    </li>
+                    <!-- Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Shop
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="#" onclick="displayFeaturedProducts();">Featured Products</a>
+                            </li>
+                            <li id="catMenu">
+                                <!-- Sub-menu populated on page load (common.js/category.js) -->
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pages/cart.html">My Cart</a>
+                    </li>
+                </ul>
+                <form class="d-flex" action="pages/search.html" method="get">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Search here..."
+                        aria-label="Search" required>
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    
+    <div id="root" class="container-fluid">
+    </div>
+    
+    <nav class="navbar fixed-bottom navbar-light bg-light">
+        <div class="container-fluid">
+            All rights reserved &copy; 2024 Anzom
+        </div>
+    </nav>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <script src="js/common.js"></script>
+    <script src="js/category.js"></script>
+    <script src="js/home.js"></script>
+    <script src="js/landingPage.js"></script>
+    <script src="js/product.js"></script>
 
-    <a href="checkout.html" class="checkout-button">Checkout</a>
 
+    <h1>Your Cart</h1>
+    <div class="alert">
+        This is an alert!
+        <span class="closebtn">&times;</span>
+    </div>
+
+    <div class="cart-container">
+        <div class="subtotal">
+            <h2>Subtotal</h2>
+            <p>Total Items: <span id="totalItems">0</span></p>
+            <p>Total Price: $<span id="totalPrice">0.00</span></p>
+        </div>
+    </div>
+
+    <div class="hero">
+        <div class="row">
+            <p>Products</p>
+            <label for="product1">
+                <input type="checkbox" id="product1" onchange="updateTotal()"> 
+                Product 1 - $20
+            </label>
+            <label for="product2">
+                <input type="checkbox" id="product2" onchange="updateTotal()"> 
+                Product 2 - $10
+            </label>
+            <label for="product3">
+                <input type="checkbox" id="product3" onchange="updateTotal()"> 
+                Product 3 - $15
+            </label>
+        </div>
+    </div>
+
+    <script>
+        function updateTotal() {
+            var totalItems = 0;
+            var totalPrice = 0;
+            
+            if (document.getElementById('product1').checked) {
+                totalItems++;
+                totalPrice += 20;
+            }
+            if (document.getElementById('product2').checked) {
+                totalItems++;
+                totalPrice += 10;
+            }
+            if (document.getElementById('product3').checked) {
+                totalItems++;
+                totalPrice += 15;
+            }
+            
+            document.getElementById('totalItems').textContent = totalItems;
+            document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
+        }
+    </script>
+    
+    <a href="checkout.html" class="checkout-button">Proceed to Checkout</a>
 </body>
