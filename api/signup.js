@@ -9,7 +9,7 @@ const pool = new Pool({
   }
 });
 
-module.exports = async (req, res) => {
+async function signupFunc(req, res) {
   const { username, email, password, phone, isSeller } = req.body;
   const saltRounds = 10;
   const reqUniqueField = [username,email,phone];
@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
     }
     if(fieldsToFix.length>0){
       let fieldString = fieldsToFix.join(', ')
-      res.status(501).json({ error: "Username, email or phone is already in use", details: 'Field(s): '+fieldString+' are already in use'});
+      return res.status(501).json({ error: "Username, email or phone is already in use", details: 'Field(s): '+fieldString+' are already in use'});
     }
     else{
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -47,11 +47,15 @@ module.exports = async (req, res) => {
           'INSERT INTO accounts(username, email, password_hash, phone_number, is_seller) VALUES($1, $2, $3, $4, $5) RETURNING user_id',
           [username, email, hashedPassword, phone, isSeller]
         );
-        res.status(201).json({ userId: result.rows[0].user_id, message: "User successfully created." });
+        return res.status(201).json({ userId: result.rows[0].user_id, message: "User successfully created." });
         
     }
   } catch (error) {
   console.error('Signup error:', error);
-  res.status(500).json({ error: "Signup failed", details: error.message });
+  return res.status(500).json({ error: "Signup failed", details: error.message });
   }
+};
+
+module.exports = async(req, res) => {
+  res = signupFunc(req, res);
 };
