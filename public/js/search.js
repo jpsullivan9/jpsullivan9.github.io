@@ -81,6 +81,7 @@ async function fetchSuggestions(query) {
         });
     } catch (error) {
         console.error('Error fetching suggestions:', error);
+        suggestionsPanel.style.display = 'none';
     }
 }
 
