@@ -9,7 +9,10 @@
     <nav>
         <a href="../index.html"><img src="../img/logo.png" alt="Anzom"></a>
         <form id="searchForm">
-            <input type="text" id="searchQuery" name="q" placeholder="Search here...">
+            <div style="position: relative;">
+                <input type="text" id="searchQuery" name="q" placeholder="Search here...">
+                <div id="suggestionsPanel" style="position: absolute; background-color: white; border: 1px solid #ddd;"></div>
+            </div>
             <input type="number" id="minPrice" name="minPrice" placeholder="Min Price" min="0">
             <input type="number" id="maxPrice" name="maxPrice" placeholder="Max Price" min="0">
             <input type="number" id="minRating" name="minRating" placeholder="Min Rating" min="0" max="5" step="1">

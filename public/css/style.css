@@ -1,4 +1,26 @@
-/* style.css */
+/* Search Page Related*/
+#suggestionsPanel {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+    z-index: 1000; /* Ensure the panel is above other content */
+}
+
+#suggestionsPanel div {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#suggestionsPanel div:hover {
+    background-color: #f0f0f0; /* Highlight suggestion on hover */
+}
+
+/* Ensure text inside suggestionsPanel is visible */
+#suggestionsPanel div {
+    color: black; /* Change text color */
+}
+/*///////////////////////////////*/
+
 
 body {
     font-family: Arial, sans-serif;

@@ -24,6 +24,66 @@ document.addEventListener('DOMContentLoaded', async () => {
     await fetchSellersAndPopulateDropdown();
 });
 
+document.addEventListener('DOMContentLoaded', async () => {
+    const searchInput = document.getElementById('searchQuery');
+    const suggestionsPanel = document.getElementById('suggestionsPanel');
+    let timeout = null;
+
+    searchInput.addEventListener('input', () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            const query = searchInput.value;
+            if (query.length > 1) {
+                fetchSuggestions(query);
+            }
+            else {
+                suggestionsPanel.style.display = 'none';
+            }
+        }, 200);
+    });
+    searchInput.addEventListener('focus', () => {
+        if (searchInput.value.length > 1) {
+            suggestionsPanel.style.display = 'block';
+        }
+    });
+    searchInput.addEventListener('blur', () => {
+        setTimeout(() => { 
+            suggestionsPanel.style.display = 'none';
+        }, 200);
+    });
+});
+
+
+
+
+async function fetchSuggestions(query) {
+    const suggestionsPanel = document.getElementById('suggestionsPanel');
+    try {
+        const response = await fetch(`/api/search-suggestions?q=${encodeURIComponent(query)}`);
+        const suggestions = await response.json();
+        suggestionsPanel.innerHTML = '';
+        suggestions.forEach(suggestion => {
+            const div = document.createElement('div');
+            div.textContent = suggestion;
+            div.style.cursor = 'pointer';
+            div.addEventListener('click', () => {
+                document.getElementById('searchQuery').value = suggestion;
+                suggestionsPanel.innerHTML = '';
+                suggestionsPanel.style.display = 'none';
+
+                const minPrice = document.getElementById('minPrice').value;
+                const maxPrice = document.getElementById('maxPrice').value;
+                const minRating = document.getElementById('minRating').value;
+                searchProducts(suggestion, minPrice, maxPrice, minRating);
+
+            });
+            suggestionsPanel.appendChild(div);
+        });
+    } catch (error) {
+        console.error('Error fetching suggestions:', error);
+    }
+}
+
 function getSellerIds() {
     const sellerSelect = document.getElementById('sellerSelect');
     const selectedOptions = Array.from(sellerSelect.selectedOptions);
@@ -96,13 +156,15 @@ async function fetchSellersAndPopulateDropdown() {
         sellers.forEach(seller => {
             const option = document.createElement('option');
             option.value = seller.user_id;
-            option.textContent = seller.username; // Assuming 'username' is a property of the seller
+            option.textContent = seller.username;
             sellerSelect.appendChild(option);
         });
     } catch (error) {
         console.error('Error fetching sellers:', error);
     }
 }
+
+
 
 
 function fetchCategories(){
@@ -123,6 +185,3 @@ function fetchCategories(){
     .catch(error => {
       console.error('Error fetching data:', error);
     });
-
-  
-
