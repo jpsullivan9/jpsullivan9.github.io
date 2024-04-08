@@ -31,8 +31,4 @@ async function getSuggestions(query) {
   return results.map(result => result.item.name);
 }
 
-setupFuse().then(() => {
-    console.log('Fuse has been set up with product names.');
-  });
-
 module.exports = { getSuggestions };

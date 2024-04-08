@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     const searchQuery = params.get('q');
     const minPrice = params.get('minPrice') || '';
@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const minRating = document.getElementById('minRating').value;
         searchProducts(query, minPrice, maxPrice, minRating);
     });
+
+    await fetchSellersAndPopulateDropdown();
 });
 
 function getSellerIds() {
@@ -85,15 +87,33 @@ function displaySuggestions(suggestions, originalQuery) {
         resultsContainer.innerHTML = `<div>No matches found for "${originalQuery}".</div>`;
     }
 }
+
+async function fetchSellersAndPopulateDropdown() {
+    try {
+        const response = await fetch('/api/sellers');
+        const sellers = await response.json();
+        const sellerSelect = document.getElementById('sellerSelect');
+        sellers.forEach(seller => {
+            const option = document.createElement('option');
+            option.value = seller.user_id;
+            option.textContent = seller.username; // Assuming 'username' is a property of the seller
+            sellerSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error fetching sellers:', error);
+    }
+}
+
+
 function fetchCategories(){
-fetch('/category.js')
-  .then(response => response.json())
-  .then(categories => {
-    // Process categories data
-  })
-  .catch(error => {
-    console.error('Error fetching categories:', error);
-  });
+    fetch('/category.js')
+    .then(response => response.json())
+    .then(categories => {
+        // Process categories data
+    })
+    .catch(error => {
+        console.error('Error fetching categories:', error);
+    });
 }
   fetch(`your_api_endpoint?q=query&minPrice=${minPrice}&maxPrice=${maxPrice}&category=${selectedCategory}`)
     .then(response => response.json())
@@ -105,3 +125,4 @@ fetch('/category.js')
     });
 
   
+
