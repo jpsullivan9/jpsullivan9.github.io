@@ -9,7 +9,7 @@ const pool = new Pool({
   }
 });
 
-module.exports = async (req, res) => {
+const searchQuery = async (req, res) => {
   const { q, minPrice, maxPrice, minRating, sellerIds } = req.query;
   let queryParams = [`%${q}%`];
   let queryConditions = ["SIMILARITY(name, $1) > 0.3"]; // adjustable query threshold
@@ -60,3 +60,5 @@ module.exports = async (req, res) => {
     res.status(500).json({ error: 'Database query failed', details: error.message });
   }
 };
+
+module.exports = searchQuery;

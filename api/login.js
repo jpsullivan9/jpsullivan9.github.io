@@ -9,8 +9,7 @@ const pool = new Pool({
     rejectUnauthorized: false
   }
 });
-
-module.exports = async (req, res) => {
+async function loginFunc(req,res){
   const { email, password } = req.body;
 
   try {
@@ -19,15 +18,19 @@ module.exports = async (req, res) => {
       const isValid = await bcrypt.compare(password, rows[0].password_hash);
       const tokenAuth = jwt.sign({ userId: rows[0].user_id, username: rows[0].username, isSeller: rows[0].is_seller}, 'superSecret', { expiresIn: '1h' });
       if (isValid) {
-        res.status(200).json({ token: tokenAuth, message: "Login successful." });
+        return res.status(200).json({ token: tokenAuth, message: "Login successful." });
       } else {
-        res.status(401).json({ error: "Invalid credentials." });
+        return res.status(401).json({ error: "Invalid credentials." });
       }
     } else {
-      res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "User not found" });
     }
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ error: "Login failed", details: error.message });
+    return res.status(500).json({ error: "Login failed", details: error.message });
   }
+}
+
+module.exports = async (req, res) => {
+  res = loginFunc(req,res);
 };

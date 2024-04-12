@@ -12,7 +12,7 @@ const pool = new Pool({
 });
 
  module.exports = async (req, res) => {
-  const {email, shippingAddress, productID, subtotal} = await req.query;
+  const {email, shippingAddress, productID, subtotal} = await req.body;
 //(async () => {
    //const res = await fetch('https://swep-roject.vercel.app/pages/checkout.html');
   try{ 
