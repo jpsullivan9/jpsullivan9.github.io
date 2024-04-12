@@ -36,6 +36,6 @@
     },
     "author": "",
     "devDependencies": {
-        "vercel": "^33.6.1"
+        "vercel": "^32.3.0"
     }
 }
