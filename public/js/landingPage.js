@@ -27,3 +27,46 @@ const displayFeaturedProducts = async () => {
         console.error('Error fetching and displaying featured products:', error);
     }
 };
+
+document.addEventListener('DOMContentLoaded', async () => {
+    //////////////////////////// ChatBot stuff(place in a DOMContentLoaded document listener) //////////////////////////////////////////
+    const chatInput = document.getElementById('chatInput');
+    const chatMessages = document.getElementById('chatMessages');
+
+    chatInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && chatInput.value.trim() !== '') {
+            const userMessage = chatInput.value;
+            displayMessage('user', userMessage);
+            handleUserMessage(userMessage);
+            chatInput.value = '';
+        }
+    });
+
+    function displayMessage(sender, message) {
+        const messageDiv = document.createElement('div');
+        const prefix = sender === 'user' ? 'You: ' : 'Anzom ChatBot: ';
+        messageDiv.textContent = prefix + message;
+        messageDiv.className = sender === 'user' ? 'user-message' : 'chatbot-message';
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function handleUserMessage(message) {
+        try {
+            const apiResponse = await fetch('/api/chatbot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message }),
+            });
+            const apiData = await apiResponse.json();
+            displayMessage('chatbot', apiData.message);
+        } catch (error) {
+            console.error('Fetching response from server failed:', error);
+            displayMessage('chatbot', 'Sorry, I am unable to fetch a response right now.');
+        }
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////
+});
