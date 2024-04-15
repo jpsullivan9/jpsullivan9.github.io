@@ -6,6 +6,48 @@ document.addEventListener('DOMContentLoaded', function() {
     const authFormsContainer = document.getElementById('authForms');
     const qrCodeContainer = document.getElementById('qrImage');
 
+
+
+    //////////////////////////// ChatBot stuff(place in a DOMContentLoaded document listener) //////////////////////////////////////////
+    const chatInput = document.getElementById('chatInput');
+    const chatMessages = document.getElementById('chatMessages');
+
+    chatInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && chatInput.value.trim() !== '') {
+            const userMessage = chatInput.value;
+            displayChatMessage('user', userMessage);
+            handleUserMessage(userMessage);
+            chatInput.value = '';
+        }
+    });
+
+    function displayChatMessage(sender, message) {
+        const messageDiv = document.createElement('div');
+        const prefix = sender === 'user' ? 'You: ' : 'Anzom ChatBot: ';
+        messageDiv.textContent = prefix + message;
+        messageDiv.className = sender === 'user' ? 'user-message' : 'chatbot-message';
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function handleUserMessage(message) {
+        try {
+            const apiResponse = await fetch('/api/chatbot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message }),
+            });
+            const apiData = await apiResponse.json();
+            displayChatMessage('chatbot', apiData.message);
+        } catch (error) {
+            console.error('Fetching response from server failed:', error);
+            displayChatMessage('chatbot', 'Sorry, I am unable to fetch a response right now.');
+        }
+    }
+    /////////////////////////////////////////////////////////////////////////////
+
     function checkLoggedIn() {
         const token = localStorage.getItem('token');
         if (token) {
