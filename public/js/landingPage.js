@@ -30,6 +30,16 @@ const displayFeaturedProducts = async () => {
 
 document.addEventListener('DOMContentLoaded', async () => {
     //////////////////////////// ChatBot stuff(place in a DOMContentLoaded document listener) //////////////////////////////////////////
+    
+    const chatbotTrigger = document.getElementById('chatbotTrigger');
+    const chatbotPanel = document.getElementById('chatbotPanel');
+
+    chatbotTrigger.addEventListener('click', () => {
+        const isDisplayed = chatbotPanel.style.display !== 'none';
+        chatbotPanel.style.display = isDisplayed ? 'none' : 'block';
+        chatbotTrigger.textContent = isDisplayed ? 'Chat' : 'Close';
+    });
+    
     const chatInput = document.getElementById('chatInput');
     const chatMessages = document.getElementById('chatMessages');
 
