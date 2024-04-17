@@ -91,16 +91,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const searchForm = document.getElementById('searchForm');
+    const subCategorySelect = document.getElementById('subCategorySelect');
     searchForm.addEventListener('submit', function(event) {
         event.preventDefault();
         const query = document.getElementById('searchQuery').value;
         const minPrice = document.getElementById('minPrice').value;
         const maxPrice = document.getElementById('maxPrice').value;
         const minRating = document.getElementById('minRating').value;
-        searchProducts(query, minPrice, maxPrice, minRating);
+        const subcategoryId = subCategorySelect.value;
+        searchProducts(query, minPrice, maxPrice, minRating, subcategoryId);
     });
 
     await fetchSellersAndPopulateDropdown();
+
+    await fetchSubcategoriesAndPopulateDropdown();
+
 });
 
 
@@ -140,7 +145,7 @@ function getSellerIds() {
     return selectedOptions.map(option => option.value);
 }
 
-function searchProducts(query, minPrice = '', maxPrice = '', minRating = '') {
+function searchProducts(query, minPrice = '', maxPrice = '', minRating = '', subcategoryId = '') {
     const sellerSelect = document.getElementById('sellerSelect');
     const selectedSellerIds = Array.from(sellerSelect.selectedOptions).map(option => option.value).join(',');
     const queryParams = new URLSearchParams({
@@ -148,7 +153,8 @@ function searchProducts(query, minPrice = '', maxPrice = '', minRating = '') {
         minPrice,
         maxPrice,
         minRating,
-        sellerIds: selectedSellerIds
+        sellerIds: selectedSellerIds,
+        subcategoryId
     }).toString();
     fetch(`/api/search?${queryParams}`)
         .then(response => response.json())
@@ -214,24 +220,18 @@ async function fetchSellersAndPopulateDropdown() {
     }
 }
 
-
-
-
-function fetchCategories(){
-    fetch('/category.js')
-    .then(response => response.json())
-    .then(categories => {
-        // Process categories data
-    })
-    .catch(error => {
-        console.error('Error fetching categories:', error);
-    });
+async function fetchSubcategoriesAndPopulateDropdown() {
+    try {
+        const response = await fetch('/api/subcategories');
+        const subcategories = await response.json();
+        const subCategorySelect = document.getElementById('subCategorySelect');
+        subcategories.forEach(subcat => {
+            const option = document.createElement('option');
+            option.value = subcat.id;
+            option.textContent = subcat.name;
+            subCategorySelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error fetching subcategories:', error);
+    }
 }
-  fetch(`your_api_endpoint?q=query&minPrice=${minPrice}&maxPrice=${maxPrice}&category=${selectedCategory}`)
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-    })
-    .catch(error => {
-      console.error('Error fetching data:', error);
-    });

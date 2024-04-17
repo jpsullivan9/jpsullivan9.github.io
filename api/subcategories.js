@@ -18,12 +18,15 @@ const getSubCategories = async (req, res) => {
             if (rows.length > 0) {
                 res.status(200).json(rows[0]);
             } else {
-                res.status(404).json({ error: "Product not found" });
+                res.status(404).json({ error: "Subcategory not found" });
             }
         } else if (catId) {
             // Fetch subcategories for a given category id.
-            const { rows } = await pool.query("SELECT * FROM subcategories WHERE category_id = $1", [catId]);
-            
+            const { rows }= await pool.query("SELECT * FROM subcategories WHERE category_id = $1", [catId]);
+            res.status(200).json(rows);
+        }
+        else {
+            const { rows }= await pool.query("SELECT * FROM subcategories");
             res.status(200).json(rows);
         }
     } catch (error) {
