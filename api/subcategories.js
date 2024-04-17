@@ -26,7 +26,7 @@ const getSubCategories = async (req, res) => {
             res.status(200).json(rows);
         }
         else {
-            const { rows }= await pool.query("SELECT * FROM subcategories");
+            const { rows }= await pool.query("SELECT * FROM subcategories ORDER BY id");
             res.status(200).json(rows);
         }
     } catch (error) {
