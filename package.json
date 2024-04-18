@@ -20,9 +20,9 @@
         "url": "https://github.com/jpsullivan9/jpsullivan9.github.io.git/issues"
     },
     "dependencies": {
-        "@easypost/api": "^7.2.0",
-        "@google-cloud/dialogflow": "^6.5.0",
-        "@vercel/postgres": "^0.7.2",
+        "@easypost/api": "^7.3.0",
+        "@google-cloud/dialogflow": "^6.6.0",
+        "@vercel/postgres": "^0.8.0",
         "bcrypt": "^5.1.1",
         "debug": "^4.3.4",
         "dialogflow": "^1.2.0",
@@ -31,13 +31,13 @@
         "jsonwebtoken": "^9.0.2",
         "mysql": "^2.18.1",
         "otplib": "^12.0.1",
-        "pg": "^8.11.3",
+        "pg": "^8.11.5",
         "qrcode": "^1.5.3",
-        "stripe": "^14.22.0",
+        "stripe": "^15.3.0",
         "uuid": "^9.0.1"
     },
     "author": "",
     "devDependencies": {
-        "vercel": "^32.3.0"
+        "vercel": "^34.1.1"
     }
 }
