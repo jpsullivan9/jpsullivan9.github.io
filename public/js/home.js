@@ -27,9 +27,18 @@ const showHome = (ele) => {
     rootContainer.innerHTML = homeContent;
 };
 
+const determineLogin = () => {
+    const username = localStorage.getItem("username");
+    if (username !== null && username !== undefined) {
+        const loginEle = document.querySelector("#loginLnk");
+        loginEle.innerHTML = "Welcome " + username + "!";
+    }
+};
+
 const initialize = async () => {
     await fetchCategories();
     loadMenu();
+    determineLogin();
     const currHash = window.location.hash?.replace("#", "");
     if (currHash !== "") {
         const values = currHash.split("&");

@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     authFormsContainer.style.display = 'block'; 
                     logoutStuff.style.display = 'none';
                     localStorage.removeItem('token');//clear bad token
+                    localStorage.removeItem('username');
                 }
                 return response.json();
             })
@@ -74,6 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = '/';
             let token = data.token;
             localStorage.setItem('token',token);
+            localStorage.setItem('username', data.username);
         })
         .catch(error => {
             displayMessage('Login Error: ' + error.message, true);
@@ -114,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
     logoutBtn.addEventListener('click', function(event) {
         event.preventDefault();
         localStorage.removeItem('token');
+        localStorage.removeItem('username');
         window.location.href = '/';
     });
 
