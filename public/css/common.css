@@ -1,23 +1,57 @@
 /* Chat Bot Related */
-#chatbotTrigger {
+.cb-open {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    background-color: #007bff;
-    color: white;
+    color: orange;
     border: none;
-    border-radius: 50%;
-    padding: 15px;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    z-index: 100;
+    z-index: 1030;
 }
 
-#chatbotTrigger:hover {
-    background-color: #0056b3;
+.cb-open:hover {
+    color: darkorange;
 }
 
-/*////////////////////*/
+.cb-close {
+    position: fixed;
+    bottom: 282px;
+    right: 12px;
+    color: gray;
+    cursor: pointer;
+    z-index: 1040;
+}
+
+.cb-panel {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    border: 1px solid #ccc;
+    z-index: 1030;
+}
+
+.cb-messages {
+    height: 200px;
+    overflow-y: auto;
+    padding: 5px;
+    margin-bottom: 10px;
+    background: #f9f9f9;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.cb-input {
+    width: calc(100% - 20px);
+    padding: 10px 10px;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
 
 .dropdown-menu li {
     position: relative;
