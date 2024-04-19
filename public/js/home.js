@@ -1,5 +1,5 @@
 const homeEle = document.querySelector("#homeLnk");
-const images = [
+const banners = [
     "https://www.x-cart.com/wp-content/uploads/2019/01/ecommerce.jpg",
     "https://blog.flock.com/hs-fs/hubfs/Ecommerce.jpeg?width=1800&height=600&name=Ecommerce.jpeg",
     "https://www.cloudways.com/blog/wp-content/uploads/Ecommerce-Shopping-Infographics.png",
@@ -13,7 +13,7 @@ const images = [
 const showHome = (ele) => {
     const homeContent = `
         <div class="row justify-content-md-center p-2">
-            <img class="img-fluid" src="${getRandomImage(images)}" alt="Online commerce courtesy xcart"/>
+            <img class="img-fluid" src="${getRandomImage(banners)}" alt="Online commerce"/>
         </div>
         <div class="row p-2">
             <div class="col-2"></div>

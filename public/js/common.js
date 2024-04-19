@@ -55,8 +55,9 @@ const getRandomImage = (images) => {
     const minCeiled = Math.ceil(1);
     const maxFloored = Math.floor(images.length);
     // The maximum is inclusive and the minimum is inclusive
-    const randomIndex = Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
-    return images[randomIndex];
+    let randomIndex = Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+    const bannerIndex = randomIndex > images.length ? images.length - 1 : randomIndex;
+    return images[bannerIndex];
 };
 
 const getNoDescContent = (desc) => {

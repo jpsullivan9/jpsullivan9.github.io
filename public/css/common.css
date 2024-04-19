@@ -50,7 +50,7 @@
 }
 
 .cb-input {
-    width: calc(100% - 20px);
+    width: 100%;
     padding: 10px 10px;
     border: 1px solid #bbb;
     border-radius: 5px;
