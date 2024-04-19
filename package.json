@@ -2,7 +2,7 @@
     "name": "anzom",
     "version": "1.0.0",
     "description": "An online ecommerce store that provides competitive pricing to the customers",
-    "main": "api/search.js",
+    "main": "public/js/home.js",
     "scripts": {
         "test": "vercel",
         "local": "vercel dev"
