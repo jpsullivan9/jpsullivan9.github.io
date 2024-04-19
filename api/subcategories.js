@@ -1,19 +1,11 @@
-const { Pool } = require("pg");
-require("dotenv").config();
-
-const pool = new Pool({
-    connectionString: process.env.POSTGRES_URL,
-    ssl: {
-        rejectUnauthorized: false
-    }
-});
+const database = require("./database");
 
 const getSubCategories = async (req, res) => {
     try {
         const { id, catId } = req.query;
         if (id) {
             // Fetch a single sub-category.
-            const { rows } = await pool.query("SELECT * FROM subcategories WHERE id = $1", [id]);
+            const { rows } = await database.query("SELECT * FROM subcategories WHERE id = $1", [id]);
 
             if (rows.length > 0) {
                 res.status(200).json(rows[0]);
@@ -22,11 +14,11 @@ const getSubCategories = async (req, res) => {
             }
         } else if (catId) {
             // Fetch subcategories for a given category id.
-            const { rows }= await pool.query("SELECT * FROM subcategories WHERE category_id = $1", [catId]);
+            const { rows }= await database.query("SELECT * FROM subcategories WHERE category_id = $1", [catId]);
             res.status(200).json(rows);
         }
         else {
-            const { rows }= await pool.query("SELECT * FROM subcategories ORDER BY id");
+            const { rows }= await database.query("SELECT * FROM subcategories ORDER BY id");
             res.status(200).json(rows);
         }
     } catch (error) {

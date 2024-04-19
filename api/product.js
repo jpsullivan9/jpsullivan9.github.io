@@ -1,19 +1,11 @@
-const { Pool } = require("pg");
-require("dotenv").config();
+const database = require("./database");
 
-const pool = new Pool({
-    connectionString: process.env.POSTGRES_URL,
-    ssl: {
-        rejectUnauthorized: false
-    }
-});
-
-const products_home = async (req, res) => {
+const getProducts = async (req, res) => {
     try {
         const { id, featured, subCat } = req.query;
         if (id) {
             // Fetch a single product by ID
-            const { rows } = await pool.query("SELECT * FROM products WHERE id = $1", [id]);
+            const { rows } = await database.query("SELECT * FROM products WHERE id = $1", [id]);
 
             if (rows.length > 0) {
                 res.status(200).json(rows[0]);
@@ -22,12 +14,12 @@ const products_home = async (req, res) => {
             }
         } else if (featured) {
             // Fetch only featured products
-            const { rows } = await pool.query("SELECT * FROM products WHERE featured = true");
+            const { rows } = await database.query("SELECT * FROM products WHERE featured = true");
 
             res.status(200).json(rows);
         } else if (subCat) {
-            // Fetch only featured products
-            const { rows } = await pool.query("SELECT * FROM products WHERE $1 = ANY (subcategories)", [subCat]);
+            // Fetch products with the passed in subcategory
+            const { rows } = await database.query("SELECT * FROM products WHERE $1 = ANY (subcategories)", [subCat]);
 
             res.status(200).json(rows);
         }
@@ -37,4 +29,4 @@ const products_home = async (req, res) => {
     }
 };
 
-module.exports = products_home;
+module.exports = getProducts;
