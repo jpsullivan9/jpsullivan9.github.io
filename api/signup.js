@@ -1,5 +1,6 @@
 const { Pool } = require("pg");
 const bcrypt = require('bcrypt');
+const randomstring = require("randomstring");
 require("dotenv").config();
 
 const pool = new Pool({
@@ -43,11 +44,21 @@ async function signupFunc(req, res) {
         }
 
         const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const couponCode = randomstring.generate({
+            length: 10,
+            capitalization: 'uppercase'
+        });
         const result = await pool.query(
           'INSERT INTO accounts(username, email, password_hash, phone_number, is_seller) VALUES($1, $2, $3, $4, $5) RETURNING user_id',
           [username, email, hashedPassword, phone, isSeller]
         );
-        return res.status(201).json({ userId: result.rows[0].user_id, message: "User successfully created." });
+        const userId = result.rows[0].user_id;
+        if (!isSeller) {
+            await pool.query(
+                "INSERT INTO coupons(code, userid) VALUES ($1, $2)", [couponCode, userId]
+            );
+        };
+        return res.status(201).json({ userId: userId, message: "User successfully created." });
         
     }
   } catch (error) {

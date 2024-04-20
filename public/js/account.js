@@ -6,6 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const authFormsContainer = document.getElementById('authForms');
     const qrCodeContainer = document.getElementById('qrImage');
 
+    const clearLoginData = () => {
+        localStorage.removeItem("token");//clear bad token
+        localStorage.removeItem("username");
+        localStorage.removeItem("coupon");
+    };
+
     function checkLoggedIn() {
         const token = localStorage.getItem('token');
         if (token) {
@@ -21,8 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     //Token invalid
                     authFormsContainer.style.display = 'block'; 
                     logoutStuff.style.display = 'none';
-                    localStorage.removeItem('token');//clear bad token
-                    localStorage.removeItem('username');
+                    clearLoginData();
                 }
                 return response.json();
             })
@@ -76,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let token = data.token;
             localStorage.setItem('token',token);
             localStorage.setItem('username', data.username);
+            localStorage.setItem("coupon", data.coupon);
         })
         .catch(error => {
             displayMessage('Login Error: ' + error.message, true);
@@ -115,8 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     logoutBtn.addEventListener('click', function(event) {
         event.preventDefault();
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
+        clearLoginData();
         window.location.href = '/';
     });
 
