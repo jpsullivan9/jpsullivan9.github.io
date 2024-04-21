@@ -2,10 +2,10 @@ const database = require("./database");
 
 const getProducts = async (req, res) => {
     try {
-        const { id, featured, subCat } = req.query;
-        if (id) {
+        const { pid, featured, scid } = req.query;
+        if (pid) {
             // Fetch a single product by ID
-            const { rows } = await database.query("SELECT * FROM products WHERE id = $1", [id]);
+            const { rows } = await database.query("SELECT * FROM products WHERE id = $1", [pid]);
 
             if (rows.length > 0) {
                 res.status(200).json(rows[0]);
@@ -17,9 +17,9 @@ const getProducts = async (req, res) => {
             const { rows } = await database.query("SELECT * FROM products WHERE featured = true");
 
             res.status(200).json(rows);
-        } else if (subCat) {
+        } else if (scid) {
             // Fetch products with the passed in subcategory
-            const { rows } = await database.query("SELECT * FROM products WHERE $1 = ANY (subcategories)", [subCat]);
+            const { rows } = await database.query("SELECT * FROM products WHERE $1 = ANY (subcategories)", [scid]);
 
             res.status(200).json(rows);
         }

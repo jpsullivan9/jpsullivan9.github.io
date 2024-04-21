@@ -27,20 +27,29 @@ const setHashForUrl = () => {
     window.location.hash = val;
 };
 
-const buildHash = (id) => {
-    switch (currentPageId) {
+const prepHash = (pageId, id) => {
+    switch (pageId) {
         case "cat":
-            urlHash.delete("subCat");
+            urlHash.delete("scid");
+            urlHash.delete("pid");
             urlHash.set("cat", id);
             break;
         case "subCat":
-            urlHash.set("subCat", id);
+            urlHash.delete("pid");
+            urlHash.set("scid", id);
+            break;
+        case "prod":
+            urlHash.set("pid", id);
             break;
         default:
             currentPageId = undefined;
             urlHash = new Map();
             break;
     };
+};
+
+const buildHash = (id) => {
+    prepHash(currentPageId, id);
     setHashForUrl();
 };
 

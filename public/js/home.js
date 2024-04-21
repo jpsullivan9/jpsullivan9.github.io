@@ -65,8 +65,10 @@ const initialize = async () => {
             urlHash.set(value[0], value[1]);
         });
     }
-    if (urlHash.get("subCat") !== undefined) {
-        displayListingPage(urlHash.get("subCat"));
+    if (urlHash.get("pid") !== undefined) {
+        displayDetailPage(urlHash.get("pid"));
+    } else if (urlHash.get("scid") !== undefined) {
+        displayListingPage(urlHash.get("scid"));
     } else if (urlHash.get("cat") !== undefined) {
         displayLandingPage(urlHash.get("cat"));
     } else {

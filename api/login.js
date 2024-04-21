@@ -6,7 +6,7 @@ const loginFunc = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const { rows } = await database.query('SELECT a.user_id, a.username, a.is_seller, a.password_hash, c.code FROM accounts AS a JOIN coupons AS c ON a.user_id = c.userid WHERE c.active = TRUE AND a.email = $1', [email]);
+        const { rows } = await database.query("SELECT a.user_id, a.username, a.is_seller, a.password_hash, c.code FROM accounts AS a LEFT JOIN coupons AS c ON a.user_id = c.userid WHERE c.active = TRUE AND a.email = $1", [email]);
         if (rows.length > 0) {
             const user = rows[0];
             const isValid = await bcrypt.compare(password, user.password_hash);
