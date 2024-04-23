@@ -1,15 +1,6 @@
 const rootContainer = document.querySelector("#root");
 const urlHash = new Map();
 let currentPageId;
-let currentActive;
-
-const setActive = (ele) => {
-    ele.classList.add("active");
-    if (currentActive) {
-        currentActive.classList.remove("active");
-    };
-    currentActive = ele;
-};
 
 const setHashForUrl = () => {
     const mapItr = urlHash.entries();
