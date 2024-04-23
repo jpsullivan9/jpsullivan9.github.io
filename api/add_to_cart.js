@@ -9,7 +9,7 @@ const pool = new Pool({
   });
 
   module.exports = async (req, res) => {
-    const {email, productID} = await req.body;
+    const {email, productID, quantity} = await req.body;
     //get user_id from email post request and check if valid user 
     if(email == undefined || productID == undefined){
         res.status(400).json({message : "Not enough information"});
@@ -24,7 +24,7 @@ const pool = new Pool({
         const userID = rows[0].user_id;
         var cartId;
         //res.status(400).json({cart: cartId, userID : userID});
-      
+      //checks if cart is already created 
             try{
                 cartId = await pool.query('INSERT INTO carts (user_id) VALUES ($1)', [rows[0].user_id]);
             }catch{}
@@ -38,17 +38,30 @@ const pool = new Pool({
             //check if item is in stock
             res.status(404).json({message : "Product is sold out!"});
         }
+        if(rowsProduct.rows[0].stock_quantity < quantity){
+            res.status(400).json({message : "Quantity is larger than available stock!"});
+
+        }
        // res.status(400).json
 
       //  const item_quantity  = await pool.query('SELECT quantity FROM cart_items WHERE (user_id, product_id) = $1, $2', [rows[0].user_id, productID]); 
-        const quantity = 1;
         const price  = rowsProduct.rows[0].price;
         const save = false;
         cartID = cartId.rows[0].cart_id;
+
+        //check to see if item already in the cart_items 
+        const alreadyAdded = await pool.query('SELECT * FROM cart_items WHERE cart_id = $1 AND product_id = $2', [cartID, productID]);
+       // res.status(400).json({added : alreadyAdded});
         
-        // res.status(400).json({cart_id : cartId, price : price, quantity : 1, save : save, product: productID});
+           //item already in cart
+           if(alreadyAdded.rows.length > 0){
+            const update  = await pool.query('UPDATE cart_items SET quantity = $1 WHERE cart_id = $2 AND product_id = $3', [quantity + alreadyAdded.rows[0].quantity, cartID, productID]);
+           }
+            else{
+            const result = await pool.query("INSERT INTO cart_items (cart_id, product_id, price, quantity, save_for_later) VALUES ($1, $2, $3, $4, $5)", [cartID, productID, price, quantity, save]);
+            }
+           // res.status(400).json({cart_id : cartId, price : price, quantity : 1, save : save, product: productID});
         //add item into cart items
-        const result = await pool.query("INSERT INTO cart_items (cart_id, product_id, price, quantity, save_for_later) VALUES ($1, $2, $3, $4, $5)", [cartID, productID, price, quantity, save]);
        
         res.status(200).json({message : "Item successfully added to cart!"});
     }else{
