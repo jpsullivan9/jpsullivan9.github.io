@@ -10,7 +10,7 @@ const banners = [
     "https://imatrix.com/wp-content/uploads/sites/12/2021/03/ecommerce.jpg"
 ];
 
-const showHome = (ele) => {
+const showHome = () => {
     const homeContent = `
         <div class="row justify-content-md-center p-2">
             <img class="img-fluid" src="${getRandomImage(banners)}" alt="Online commerce"/>
@@ -23,7 +23,6 @@ const showHome = (ele) => {
             <div class="col-2"></div>
         </div>
     `;
-    setActive(ele);
     rootContainer.innerHTML = homeContent;
 };
 
@@ -53,6 +52,7 @@ const displayFlash = () => {
 };
 
 const initialize = async () => {
+    buildNav("./");
     determineLogin();
     displayFlash();
     await fetchCategories();
@@ -72,7 +72,7 @@ const initialize = async () => {
     } else if (urlHash.get("cat") !== undefined) {
         displayLandingPage(urlHash.get("cat"));
     } else {
-        showHome(homeEle);
+        showHome();
     }
 };
 
