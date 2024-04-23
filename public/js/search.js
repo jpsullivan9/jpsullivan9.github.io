@@ -128,7 +128,7 @@ function displaySearchResults(data) {
         resultsContainer.innerHTML = `<div>No products found. Try adjusting your search or filter settings.</div>`;
     } else {
         resultsContainer.innerHTML = data.map(product => `
-            <div class="product" onclick="location.href='/pages/product.html?id=${product.id}'" style="cursor:pointer;">
+            <div class="product" onclick="location.href='/index.html#pid=${product.id}'" style="cursor:pointer;">
                 <br>
                 <img src="${product.image_url}" alt="${product.name}" style="width:100px; height:100px; display:block; margin:auto;">
                 <h2>${product.name}</h2>
