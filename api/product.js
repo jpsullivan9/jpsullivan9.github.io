@@ -19,7 +19,7 @@ const getProducts = async (req, res) => {
             res.status(200).json(rows);
         } else if (scid) {
             // Fetch products with the passed in subcategory
-            const { rows } = await database.query("SELECT * FROM products WHERE $1 = ANY (subcategories)", [scid]);
+            const { rows } = await database.query("SELECT * FROM products WHERE $1 = subcategory", [scid]);
 
             res.status(200).json(rows);
         }
