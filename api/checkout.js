@@ -2,6 +2,7 @@ require("dotenv").config();
 const apiKey = process.env.SECRET_KEY;
 const stripe = require('stripe')(apiKey);
 const apiURL  = 'https://api.stripe.com/v1';
+const domain = 'https://swep-roject.vercel.app'
 let isValidAddress= false;
 const { Pool } = require("pg");
 
@@ -12,7 +13,7 @@ const pool = new Pool({
     }
   });
 
-async function createProduct(name){
+const createProduct = async(name) =>{
     try {
         const response = await fetch(`${apiURL}/products`, {
             method : 'POST',
@@ -25,6 +26,11 @@ async function createProduct(name){
         });
         const product = await response.json();
         return product;
+        
+      //  const product = await stripe.products.create({
+       //     name : name,
+       // });
+        //res.status(200).send(product);
     }catch (err) {
         console.error('error creating product', err);
         throw err;
@@ -32,7 +38,7 @@ async function createProduct(name){
 
 };
 
-async function addPrice(productID, amount){
+const addPrice = async(productID, amount) =>{
     try{
         const response = await fetch(`${apiURL}/prices`, {
             method : "POST",
@@ -48,13 +54,13 @@ async function addPrice(productID, amount){
         const price = await response.json();
         return price;
     }catch (err) {
-        console.error('error adding price', err);
+        res.status(400).json({message : "failure adding price", details : err});
         throw err;
     }
 
 };
 
-async function createPaymentLink(priceID){
+const createPaymentLink = async(priceID) => {
     try{
         const response = await fetch(`${apiURL}/checkout/sessions`, {
             method : 'POST',
@@ -66,17 +72,72 @@ async function createPaymentLink(priceID){
         });
         //console.log(response);
         const session = await response.json();
-       // console.log(session);
-        return session.url;
+        
+        /*
+        const session = await stripe.checkout.sessions.create({
+        success_url : 'https://google.com',
+            cancel_url = 
+            line_items: [
+                {
+                price : priceID,
+                quantity : 1,
+                }
+           ],
+        mode : 'payment',    
+
+        });
+
+       */// console.log(session);
+        //res.status(200).json({ses : session});
+       return session;
     } catch (err) {
-        console.error('error making payment link', err);
+        res.status(400).json({message : "Failure to make payment link"});
+        //console.error('error making payment link', err);
         throw err;
 
     }
 
 };
 
-   (async () => {
+module.exports = async (req, res) => {
+    const {user_id} = req.body;
+
+ 
+
+    try{
+   const cartId = await pool.query('SELECT "cart_id" FROM carts WHERE "user_id" = $1', [user_id]);
+    const cartItems = await pool.query('SELECT * FROM cart_items WHERE cart_id = $1', [cartId.rows[0].cart_id]);
+   // res.status(200).json({cart_items : cartItems});
+        let i;
+        let subtotal = 0;
+   for(i=0; i< cartItems.rowCount; i++){
+        subtotal += cartItems.rows[i].price;
+   }
+          //  res.status(200).json({sub : subtotal});
+
+
+   const username = await pool.query('SELECT username FROM accounts WHERE user_id = $1', [user_id]);
+//res.status(200).json({apikey : process.env.SECRET_KEY});
+   var product = await createProduct(username.rows[0].username);  
+       
+       /*await stripe.products.create({
+        name : username,
+   });*/
+       //await createProduct(username.rows[0].username);     
+     //  res.status(200).json({user : username.rows[0].username, prod : product, API : apiKey});
+       // res.status(200).json({user : username.rows[0].username, price : subtotal*100});
+
+   const price = await addPrice(product.id, Number(subtotal*100));
+       // res.status(200).json({user : username.rows[0].username, price : price});
+   const paymentLink = await createPaymentLink(price.id);
+       res.status(200).json({payment : paymentLink.url});
+
+    }catch (error) {
+        res.status(500).json({message : "Failure getting payment", details : error});
+    }
+
+};
+  /* (async () => {
   
     try {
 
@@ -106,3 +167,4 @@ async function createPaymentLink(priceID){
     }
 
 })();
+*/
