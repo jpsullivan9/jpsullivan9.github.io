@@ -53,11 +53,11 @@ const searchQuery = async (req, res) => {
       const suggestions = await getSuggestions(q);
       if (suggestions.length > 0) 
       {
-        res.status(200).json({ message: "No direct matches found. Suggestions:", suggestions });
+        res.status(404).json({ message: "No direct matches found. Suggestions:", suggestions });
       }
       else 
       {
-        res.status(200).json({ message: "No matches found. No suggestions found."});
+        res.status(404).json({ message: "No matches found. No suggestions found."});
       }
     }
   } catch (error) {
