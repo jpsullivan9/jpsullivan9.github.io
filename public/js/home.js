@@ -23,7 +23,9 @@ const showHome = () => {
             <div class="col-2"></div>
         </div>
     `;
-    rootContainer.innerHTML = homeContent;
+    if (rootContainer) {
+        rootContainer.innerHTML = homeContent;
+    }
 };
 
 const determineLogin = (basePath) => {
@@ -77,8 +79,7 @@ const displayFlash = () => {
     };
 };
 
-const initialize = async () => {
-    const path = "./";
+const initialize = async (path) => {
     buildNav(path);
     determineLogin(path);
     displayFlash();
@@ -102,5 +103,3 @@ const initialize = async () => {
         showHome();
     }
 };
-
-initialize();
