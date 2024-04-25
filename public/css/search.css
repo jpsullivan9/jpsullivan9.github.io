@@ -1,22 +1,21 @@
-/* Search Page Related */
 .content {
     display: flex;
-    flex-direction: row;  /* Aligns children (filterSection and searchResults) horizontally */
-    height: 100vh;  /* Optional: Makes the container take full viewport height */
+    flex-direction: row;
+    height: 100vh;
 }
 
 #filterSection {
-    width: 20%;  /* Sidebar takes up 20% of the horizontal space */
+    width: 20%;
     background-color: #f8f9fa;
     padding: 20px;
-    height: 100%;  /* Makes it take full height of the .content div */
-    overflow-y: auto;  /* Adds scroll to sidebar if content overflows */
+    height: 100%;
+    overflow-y: auto;
 }
 
 #filterSection form {
     display: flex;
-    flex-direction: column; /* Stack form groups vertically */
-    gap: 10px; /* Space between form groups */
+    flex-direction: column;
+    gap: 10px;
 }
 
 .form-group {
@@ -26,15 +25,15 @@
 
 .form-group.horizontal {
     flex-direction: row;
-    gap: 10px; /* Space between horizontal form elements */
+    gap: 10px;
 }
 
 .form-group label,
 .form-group input,
 .form-group select,
 .form-group button {
-    width: 100%; /* Ensures that controls take up the full width of the form-group */
-    margin-bottom: 5px; /* Space between label and input or select */
+    width: 100%;
+    margin-bottom: 5px;
 }
 
 .button-container {
@@ -42,7 +41,7 @@
 }
 
 button[type="submit"] {
-    width: auto; /* Adjust if you want the button width to be different */
+    width: auto;
     padding: 10px;
     background-color: #4CAF50;
     color: white;
@@ -51,13 +50,11 @@ button[type="submit"] {
     cursor: pointer;
 }
 
-/* Suggestions panel styles */
 #suggestionsPanel {
     position: absolute;
     background-color: white;
     border: 1px solid #ddd;
-    z-index: 1000; /* Ensure the panel is above other content */
-    /* Additional styles for suggestions panel if necessary */
+    z-index: 1000;
 }
 
 #suggestionsPanel div {
@@ -66,35 +63,31 @@ button[type="submit"] {
 }
 
 #suggestionsPanel div:hover {
-    background-color: #f0f0f0; /* Highlight suggestion on hover */
+    background-color: #f0f0f0;
 }
 
-/* Ensure text inside suggestionsPanel is visible */
 #suggestionsPanel div {
-    color: black; /* Change text color */
+    color: black;
 }
 
-/* Search Results styles */
 #searchResults {
-    width: 80%;  /* Main content area takes up the remaining 80% of the space */
+    width: 80%;
     padding: 20px;
-    overflow-y: auto;  /* Adds scroll to main content area if content overflows */
+    overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-/* Rest of the page styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
 }
 
-/* Main navigation bar styles */
 
 nav img {
-    height: 40px; /* Adjust height as needed */
+    height: 40px;
 }
 
 nav p {
@@ -109,10 +102,7 @@ nav input[type="text"] {
     margin-right: 5px;
 }
 
-/* Rest of the page styles */
 h2 {
     margin-top: 20px;
     text-align: center;
 }
-
-/* Additional page-wide styles as necessary */
