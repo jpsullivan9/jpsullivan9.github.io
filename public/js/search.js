@@ -132,7 +132,7 @@ function displaySearchResults(data) {
                 <br>
                 <img src="${product.image_url}" alt="${product.name}" style="width:100px; height:100px; display:block; margin:auto;">
                 <h2>${product.name}</h2>
-                <p>${product.description}</p>
+                <p>${truncateText(product.description, 200)}</p>
                 <p>Price: $${product.price}</p>
                 ${product.average_review_score !== null ? `<p>Average Reviews: ${product.average_review_score}</p>` : ''}
             </div>
@@ -183,4 +183,11 @@ async function fetchSubcategoriesAndPopulateDropdown() {
     } catch (error) {
         console.error('Error fetching subcategories:', error);
     }
+}
+
+function truncateText(text, maxLength) {
+    if (text.length > maxLength) {
+        return text.substring(0, maxLength) + '...';
+    }
+    return text;
 }
