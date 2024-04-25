@@ -1,5 +1,4 @@
 // category.js
-let categories;
 
 const fetchCategories = async () => {
     try {

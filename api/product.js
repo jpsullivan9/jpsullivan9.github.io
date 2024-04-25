@@ -1,8 +1,7 @@
 const database = require("./database");
 
-const getProducts = async (req, res) => {
+const retrieveProduct = async (pid, featured, scid, res) => {
     try {
-        const { pid, featured, scid } = req.query;
         if (pid) {
             // Fetch a single product by ID
             const { rows } = await database.query("SELECT * FROM products WHERE id = $1", [pid]);
@@ -26,6 +25,31 @@ const getProducts = async (req, res) => {
     } catch (error) {
         console.error('Database query error:', error);
         res.status(500).json({ error: 'Database query failed', details: error.message });
+    }
+};
+
+const getProducts = async (req, res) => {
+    if (req.method === "GET") {
+        const { pid, featured, scid } = req.query;
+        retrieveProduct(pid, featured, scid, res);
+    };
+    if (req.method === "POST") {
+        saveProduct(req.body, res);
+    }
+};
+
+const saveProduct = async (json, res) => {
+    try {
+        const image_url = json.image1 + "," + json.image2 + "," + json.image3;
+        const result = await database.query(
+            'INSERT INTO products(name, description, image_url, stock_quantity, price, average_review_score, seller_id, subcategory, featured) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',
+            [json.productName, json.productDescription, image_url, json.stock, json.price,
+            json.ratingAverage, json.username, json.subcategories, json.featured]
+        );
+        return res.status(201).json({ message: `Product ${json.productName} with ${result} created successfully!` });
+    } catch(error) {
+        console.error('Database query error:', error);
+        res.status(500).json({ error: 'Failed saving product!', details: error.message });
     }
 };
 

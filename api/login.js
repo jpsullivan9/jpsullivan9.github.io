@@ -12,7 +12,7 @@ const loginFunc = async (req, res) => {
             const isValid = await bcrypt.compare(password, user.password_hash);
             const tokenAuth = jwt.sign({ userId: user.user_id, username: user.username, isSeller: user.is_seller }, 'superSecret', { expiresIn: '1h' });
             if (isValid) {
-                return res.status(200).json({ token: tokenAuth, username: user.username, coupon: user.code, message: "Login successful." });
+                return res.status(200).json({ token: tokenAuth, profile: { id: user.user_id, username: user.username, seller: user.is_seller, coupon: user.code }, message: "Login successful." });
             } else {
                 return res.status(401).json({ error: "Invalid credentials." });
             }

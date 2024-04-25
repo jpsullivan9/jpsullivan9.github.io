@@ -8,8 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const clearLoginData = () => {
         localStorage.removeItem("token");//clear bad token
-        localStorage.removeItem("username");
-        localStorage.removeItem("coupon");
+        localStorage.removeItem("profile");
     };
 
     function checkLoggedIn() {
@@ -78,10 +77,8 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             window.location.href = '/';
-            let token = data.token;
-            localStorage.setItem('token',token);
-            localStorage.setItem('username', data.username);
-            localStorage.setItem("coupon", data.coupon);
+            localStorage.setItem('token', data.token);
+            localStorage.setItem("profile", JSON.stringify(data.profile));
         })
         .catch(error => {
             displayMessage('Login Error: ' + error.message, true);

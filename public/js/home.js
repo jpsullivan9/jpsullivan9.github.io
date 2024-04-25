@@ -26,19 +26,45 @@ const showHome = () => {
     rootContainer.innerHTML = homeContent;
 };
 
-const determineLogin = () => {
-    const username = localStorage.getItem("username");
+const determineLogin = (basePath) => {
+    const profile = JSON.parse(localStorage.getItem("profile"));
+    const username = profile?.username;
     if (username !== null && username !== undefined) {
+        let sellerMenu = "";
         const loginEle = document.querySelector("#loginLnk");
-        loginEle.innerHTML = `
+        const loginEleParent = loginEle.parentElement;
+        loginEleParent.classList.add("dropdown");
+
+        if (profile.seller) {
+            sellerMenu = `
+            <li>
+                <a class="dropdown-item" href="#" onclick="sellerForm();">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M399 384.2C376.9 345.8 335.4 320 288 320H224c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z"/></svg>
+                    Seller
+                </a>
+            </li>`;
+        }
+
+        loginEleParent.innerHTML = `
+        <a id="loginLnk" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 640 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H392.6c-5.4-9.4-8.6-20.3-8.6-32V352c0-2.1 .1-4.2 .3-6.3c-31-26-71-41.7-114.6-41.7H178.3zM528 240c17.7 0 32 14.3 32 32v48H496V272c0-17.7 14.3-32 32-32zm-80 32v48c-17.7 0-32 14.3-32 32V480c0 17.7 14.3 32 32 32H608c17.7 0 32-14.3 32-32V352c0-17.7-14.3-32-32-32V272c0-44.2-35.8-80-80-80s-80 35.8-80 80z"/></svg>
             Welcome ${username}!
-        `;
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="loginLnkMenuLink">
+            <li>
+                <a class="dropdown-item" href="${basePath}pages/account.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M0 96l576 0c0-35.3-28.7-64-64-64H64C28.7 32 0 60.7 0 96zm0 32V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V128H0zM64 405.3c0-29.5 23.9-53.3 53.3-53.3H234.7c29.5 0 53.3 23.9 53.3 53.3c0 5.9-4.8 10.7-10.7 10.7H74.7c-5.9 0-10.7-4.8-10.7-10.7zM176 192a64 64 0 1 1 0 128 64 64 0 1 1 0-128zm176 16c0-8.8 7.2-16 16-16H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16zm0 64c0-8.8 7.2-16 16-16H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16zm0 64c0-8.8 7.2-16 16-16H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16z"/></svg>
+                    Profile
+                </a>
+            </li>
+            ${sellerMenu}
+        </ul>`;
     };
 };
 
 const displayFlash = () => {
-    const coupon = localStorage.getItem("coupon");
+    const profile = JSON.parse(localStorage.getItem("profile"));
+    const coupon = profile?.coupon;
     if (coupon !== null && coupon !== undefined) {
         const banner = document.querySelector("#flashBanner");
         banner.classList.replace("d-none", "d-block");
@@ -52,8 +78,9 @@ const displayFlash = () => {
 };
 
 const initialize = async () => {
-    buildNav("./");
-    determineLogin();
+    const path = "./";
+    buildNav(path);
+    determineLogin(path);
     displayFlash();
     await fetchCategories();
     loadMenu();

@@ -1,6 +1,7 @@
 const rootContainer = document.querySelector("#root");
-const urlHash = new Map();
+let urlHash = new Map();
 let currentPageId;
+let categories;
 
 const setHashForUrl = () => {
     const mapItr = urlHash.entries();
@@ -23,6 +24,7 @@ const prepHash = (pageId, id) => {
         case "cat":
             urlHash.delete("scid");
             urlHash.delete("pid");
+            urlHash.delete("seller");
             urlHash.set("cat", id);
             break;
         case "subCat":
@@ -31,6 +33,10 @@ const prepHash = (pageId, id) => {
             break;
         case "prod":
             urlHash.set("pid", id);
+            break;
+        case "seller":
+            urlHash = new Map();
+            urlHash.set("seller", id);
             break;
         default:
             currentPageId = undefined;
