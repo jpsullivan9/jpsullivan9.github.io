@@ -3,7 +3,7 @@ const uuid = require('uuid');
 require('dotenv').config();
 
 const sessionId = uuid.v4();
-const projectId = process.env.GOOGLE_PROJECT_ID; // Google Cloud project ID
+const projectId = process.env.GOOGLE_PROJECT_ID;
 const languageCode = 'en';
 
 const sessionClient = new dialogflow.SessionsClient({
@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
     const userMessage = req.body.message;
     try {
         const responseMessage = await sendMessageToDialogflow(userMessage);
-        res.json({ message: responseMessage });
+        res.status(200).json({ message: responseMessage });
     } catch (error) {
         console.error('Dialogflow API error:', error);
         res.status(500).json({ message: 'We are currently encountering an error. Reach out to our team at: (111)111-1111 or support@amzon.com' });
