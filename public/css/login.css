@@ -1,0 +1,84 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+  }
+
+  .icons-top img {
+    display: block;
+    width: 40px;
+    height: auto;
+  }
+
+  .account-container {
+    max-width: 600px;
+    margin-top: 20px;
+    margin-bottom:20px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  form {
+    margin-bottom: 20px;
+  }
+
+  input[type="email"],
+  input[type="password"],
+  input[type="text"],
+  input[type="tel"],
+  button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  button {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  input[type="checkbox"] {
+    margin-right: 5px;
+  }
+
+  .show-password {
+    margin-left: 5px;
+  }
+
+  #logoutStuff {
+    text-align: center;
+  }
+
+  #qrImage {
+    margin-top: 20px;
+}
+
+  
+  #cbContainer {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
