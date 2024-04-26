@@ -37,7 +37,7 @@ const searchQuery = async (req, res) => {
 
   if (subcategoryId) {
     queryParams.push(subcategoryId);
-    queryConditions.push(`$${queryParams.length} = ANY(subcategories)`);
+    queryConditions.push(`subcategory = $${queryParams.length}`);
   }
 
   let queryText = `SELECT *, SIMILARITY(name, $1) AS sml FROM products WHERE ${queryConditions.join(' AND ')} ORDER BY sml DESC`;
