@@ -46,7 +46,7 @@ const saveProduct = async (json, res) => {
             [json.productName, json.productDescription, image_url, json.stock, json.price,
             json.ratingAverage, json.username, json.subcategories, json.featured]
         );
-        return res.status(201).json({ message: `Product ${json.productName} with ${result} created successfully!` });
+        return res.status(201).json({ message: `Product ${json.productName} with ${result.rows[0].id} created successfully!` });
     } catch(error) {
         console.error('Database query error:', error);
         res.status(500).json({ error: 'Failed saving product!', details: error.message });
