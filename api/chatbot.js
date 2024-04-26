@@ -35,6 +35,6 @@ module.exports = async (req, res) => {
         res.json({ message: responseMessage });
     } catch (error) {
         console.error('Dialogflow API error:', error);
-        res.status(500).json({ message: 'Error communicating with Dialogflow' });
+        res.status(500).json({ message: 'We are currently encountering an error. Reach out to our team at: (111)111-1111 or support@amzon.com' });
     }
 };
