@@ -16,7 +16,7 @@ const getSuggestions = async (req, res) => {
     res.status(200).json(suggestions);
   } catch (error) {
     console.error('Error fetching search suggestions:', error);
-    res.status(500).json({ message: 'Failed to fetch search suggestions' });
+    res.status(500);
   }
 };
 
