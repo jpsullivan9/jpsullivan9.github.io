@@ -12,13 +12,47 @@ const pool = new Pool({
     rejectUnauthorized: false
   }
 });
+const tokenInfo = async (token) =>{
+   try{
+      const response = await fetch(`${domain}/api/userTokenInfo`, {
+         method : 'POST',
+         headers : {
+            'Content-Type' : 'application/json',
+      },
+        body :  JSON.stringify({token : token}),                          
+      });
+      const data = await response.json();
+   return data;
+      
+   }catch{
+      return false;
+   }
+
+}
 
 module.exports = async (req, res) => {
-    const {user_id, productID} = req.body;
+    const {productID} = req.body;
 
 
 
     try{    
+      
+      const header = req.headers['authorization'];
+       let token;
+      if(typeof header !== 'undefined'){
+        const bearer = header.split(' ');
+        token = bearer[1];
+      //const isValid = await tokenInfo(token);
+
+         // res.status(200).json({token : token, valid : isValid});
+         // req.token = token;
+      } else{
+            res.status(403).json({message : "No token"});
+      }
+      const isValid = await tokenInfo(token);
+ 
+     user_id = isValid.userID;
+      
       cartId = await pool.query('SELECT "cart_id" FROM carts WHERE "user_id" = $1', [user_id]);
     //operation can only be performed on cart items, no input validation     
 
