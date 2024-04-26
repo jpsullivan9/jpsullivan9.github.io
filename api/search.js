@@ -37,7 +37,7 @@ const searchQuery = async (req, res) => {
 
   if (subcategoryId) {
     queryParams.push(subcategoryId);
-    queryConditions.push(`$${queryParams.length} = ANY(subcategories)`);
+    queryConditions.push(`subcategory = $${queryParams.length}`);
   }
 
   let queryText = `SELECT *, SIMILARITY(name, $1) AS sml FROM products WHERE ${queryConditions.join(' AND ')} ORDER BY sml DESC`;
@@ -47,7 +47,7 @@ const searchQuery = async (req, res) => {
     if (results.rows.length > 0) {
       res.status(200).json(results.rows);
     } else if (minPrice || maxPrice || minRating || sellerIds || subcategoryId) {
-      res.status(200).json({ message: "No products found. Consider adjusting filters." });
+      res.status(404).json({ message: "No products found. Consider adjusting filters." });
     }
     else {
       const suggestions = await getSuggestions(q);
