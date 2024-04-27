@@ -13,6 +13,24 @@ const pool = new Pool({
     }
   });
 
+const tokenInfo = async (token) =>{
+   try{
+      const response = await fetch(`${domain}/api/userTokenInfo`, {
+         method : 'POST',
+         headers : {
+            'Content-Type' : 'application/json',
+      },
+        body :  JSON.stringify({token : token}),                          
+      });
+      const data = await response.json();
+   return data;
+      
+   }catch{
+      return false;
+   }
+
+}
+
 const createProduct = async(name) =>{
     try {
         const response = await fetch(`${apiURL}/products`, {
@@ -68,7 +86,7 @@ const createPaymentLink = async(priceID) => {
                 'Authorization' : `Bearer ${apiKey}`,
                 'Content-Type' : 'application/x-www-form-urlencoded'
             },
-            body : `mode=payment&payment_method_types[0]=card&success_url=https://google.com&cancel_url=${domain}/pages/checkout.html&line_items[0][price]=${priceID}&line_items[0][quantity]=1`
+            body : `mode=payment&payment_method_types[0]=card&success_url=${domain}&cancel_url=${domain}/pages/checkout.html&line_items[0][price]=${priceID}&line_items[0][quantity]=1`
         });
         //console.log(response);
         const session = await response.json();
@@ -100,12 +118,33 @@ const createPaymentLink = async(priceID) => {
 };
 
 module.exports = async (req, res) => {
-    const {user_id} = req.body;
+    const {coupon} = req.body;
 
+      const header = req.headers['authorization'];
+       let token;
+      if(typeof header !== 'undefined'){
+        const bearer = header.split(' ');
+        token = bearer[1];
+      //const isValid = await tokenInfo(token);
+
+         // res.status(200).json({token : token, valid : isValid});
+         // req.token = token;
+      } else{
+            res.status(403).json({message : "No token"});
+      }
+      const isValid = await tokenInfo(token);
  
+     user_id = isValid.userID;
+
+    if(user_id == undefined){
+        res.status(400).json({valid : false});
+    }
+    
+    let couponValid = false;
 
     try{
    const cartId = await pool.query('SELECT "cart_id" FROM carts WHERE "user_id" = $1', [user_id]);
+        //res.status(200).json({cart : cartId});
     const cartItems = await pool.query('SELECT * FROM cart_items WHERE cart_id = $1', [cartId.rows[0].cart_id]);
    // res.status(200).json({cart_items : cartItems});
         let i;
@@ -113,11 +152,42 @@ module.exports = async (req, res) => {
    for(i=0; i< cartItems.rowCount; i++){
         subtotal += cartItems.rows[i].price;
    }
+        
+        if(coupon !== undefined){
+            const discount  = await pool.query('SELECT * FROM coupons WHERE userid = $1 AND code = $2 AND active = $3', [user_id, coupon, true]);
+            
+            if(discount.rowCount > 0){
+                if(discount.rows[0].is_absolute == false){
+                subtotal = subtotal - (subtotal*(discount.rows[0].applied_value/100));
+                               // res.status(400).json({disc : discount, sub : subtotal});
+
+                }
+                else if(discount.rows[0].is_absolute == true){
+                    if(discount.rows[0].applied_value >= subtotal){
+                        subtotal = 0;
+                    }
+                    else{
+                        subtotal = subtotal - discount.rows[0].applied_value;
+                    }
+                }
+
+                //res.status(200).json
+             couponValid = true;    
+                subtotal = subtotal.toFixed(2);
+
+           // const discounted  = await pool.query('UPDATE coupons SET active = $1 WHERE userid = $2 AND code = $3', [false, user_id, coupon]);
+           
+                
+            }
+            
+            
+        }
           //  res.status(200).json({sub : subtotal});
 
 
    const username = await pool.query('SELECT username FROM accounts WHERE user_id = $1', [user_id]);
 //res.status(200).json({apikey : process.env.SECRET_KEY});
+        //res.status(400).json({user : username});
    var product = await createProduct(username.rows[0].username);  
        
        /*await stripe.products.create({
@@ -130,7 +200,8 @@ module.exports = async (req, res) => {
    const price = await addPrice(product.id, Number(subtotal*100));
        // res.status(200).json({user : username.rows[0].username, price : price});
    const paymentLink = await createPaymentLink(price.id);
-       res.status(200).json({payment : paymentLink.url});
+        
+       res.status(200).json({payment : paymentLink.url, session : paymentLink.id, user : user_id, subtotal : subtotal, validCoupon : couponValid});
 
     }catch (error) {
         res.status(500).json({message : "Failure getting payment", details : error});
