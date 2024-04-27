@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoutBtn = document.getElementById('logoutBtn');
     const authFormsContainer = document.getElementById('authForms');
     const qrCodeContainer = document.getElementById('qrImage');
+    const changePasswordForm = document.getElementById('changePasswordForm');
 
     const clearLoginData = () => {
         localStorage.removeItem("token");//clear bad token
@@ -150,6 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
             displayMessage('Signup Error: ' + error.message, true);
         });
     });
+
     logoutBtn.addEventListener('click', function(event) {
         event.preventDefault();
         clearLoginData();
@@ -255,5 +257,38 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             console.error('No token found');
         }
-    }); 
+    });
+
+
+    // Change password code
+    changePasswordForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const oldPassword = document.getElementById('oldPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+        const email = document.getElementById('emailCheck').value;
+
+        if (newPassword !== confirmNewPassword) {
+            displayMessage('New passwords do not match', true);
+            return;
+        }
+
+        fetch('/api/changePassword', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, oldPassword, newPassword }),
+        })
+        .then(data => {
+            displayMessage('Password changed successfully');
+            document.getElementById('emailCheck').value = '';
+            document.getElementById('oldPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmNewPassword').value = '';
+        })
+        .catch(error => {
+            displayMessage('Change password error: ', error.message);  
+        });
+    });
 });

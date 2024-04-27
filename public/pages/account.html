@@ -41,6 +41,14 @@
         </div>
     <div id="logoutStuff" style="display: none;">
             <button id="logoutBtn">Logout</button>
+            <h2>Change Password</h2>
+            <form id="changePasswordForm">
+                <input type="email" id="emailCheck" placeholder="Email" required>
+                <input type="password" id="oldPassword" placeholder="Old Password" required>
+                <input type="password" id="newPassword" placeholder="New Password" required>
+                <input type="password" id="confirmNewPassword" placeholder="Confirm New Password" required>
+                <button id="changePass" type="submit">Change Password</button>
+            </form>
             <div>
               <p>After Pressing button below scan QR code with Authenticator app and enter given temporary code. On next login Auhenticator app will be needed to login.</p>
               <p>Authinticator apps: Google Authenticator, Authy or any other compatible 2FA app that supports otplib</p>
