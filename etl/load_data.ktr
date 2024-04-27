@@ -506,7 +506,7 @@
     <hop>
       <from>Merge join SubCat</from>
       <to>Insert Products</to>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
     </hop>
     <hop>
       <from>Merge join Cat</from>
@@ -536,7 +536,7 @@
     <hop>
       <from>Merge join SubCat</from>
       <to>Text file output for testing output</to>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
     </hop>
   </order>
   <step>
