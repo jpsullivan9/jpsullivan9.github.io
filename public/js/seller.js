@@ -34,7 +34,7 @@ const setupForm = () => {
                     body: JSON.stringify(formJson)
                 }).then(response => {
                     if (!response.ok) {
-                        showToast("Error when saving product!");
+                        showToast("Error when saving product - "  + response.statusText);
                     }
                     return response.json();
                 }).then(data => {
@@ -45,6 +45,7 @@ const setupForm = () => {
                 });
             };
             form.classList.add('was-validated');
+            event.preventDefault();
         }, false);
     });
 };
@@ -197,7 +198,7 @@ const sellerForm = () => {
                 </div>
             </div>
             <div class="mb-3 col-12">
-                <button class="btn btn-primary" type="submit">Submit form</button>
+                <button id="btnSubmit" class="btn btn-primary" type="submit">Submit</button>
             </div>
         </form>
     </div>`;
@@ -205,4 +206,5 @@ const sellerForm = () => {
     buildHash(true);
     rootContainer.innerHTML = sellerContent;
     setupForm();
+    document.getElementById("btnSubmit").click();
 };
