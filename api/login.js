@@ -6,13 +6,18 @@ const loginFunc = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const { rows } = await database.query("SELECT a.user_id, a.username, a.is_seller, a.password_hash, c.code FROM accounts AS a LEFT JOIN coupons AS c ON a.user_id = c.userid WHERE (c.active = TRUE OR c.active IS NULL) AND a.email = $1", [email]);
+        const { rows } = await database.query("SELECT a.user_id, a.username, a.is_seller, a.password_hash, a.is_2fa, c.code FROM accounts AS a LEFT JOIN coupons AS c ON a.user_id = c.userid WHERE (c.active = TRUE OR c.active IS NULL) AND a.email = $1", [email]);
         if (rows.length > 0) {
             const user = rows[0];
             const isValid = await bcrypt.compare(password, user.password_hash);
             const tokenAuth = jwt.sign({ userId: user.user_id, username: user.username, isSeller: user.is_seller }, 'superSecret', { expiresIn: '1h' });
             if (isValid) {
-                return res.status(200).json({ token: tokenAuth, profile: { id: user.user_id, username: user.username, seller: user.is_seller, coupon: user.code }, message: "Login successful." });
+                if(!user.is_2fa){
+                    return res.status(200).json({ token: tokenAuth, profile: { id: user.user_id, username: user.username, seller: user.is_seller, coupon: user.code }, message: "Login successful.", is_2fa: false });
+                }
+                else{
+                    return res.status(200).json({profile: { id: user.user_id, username: user.username, seller: user.is_seller, coupon: user.code }, is_2fa: true})
+                }
             } else {
                 return res.status(401).json({ error: "Invalid credentials." });
             }

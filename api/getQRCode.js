@@ -18,10 +18,10 @@ module.exports = async(req, res) => {
     const uri = authenticator.keyuri(userId, "Anzom", secret);
     const testing = await qrcode.toDataURL(uri);
 
-    //const result = await pool.query(
-    //    `UPDATE accounts SET temp_secret = $1 WHERE username = $2`,
-    //    [secret, username]
-    //);
+    const result = await pool.query(
+        `UPDATE accounts SET temp_secret = $1 WHERE username = $2`,
+        [secret, username]
+    );
 
       res.status(200).json({image:testing});
     } catch (e) {

@@ -24,7 +24,7 @@
                 <button type="submit">Login</button>
                 <input type="checkbox" onclick="showLoginPass()">Show Password
             </form>
-
+             
             <h2>Signup</h2>
             <form id="signupForm">
                 <input type="text" id="signupUsername" placeholder="Username" required>
@@ -39,17 +39,23 @@
                 <button type="submit">Signup</button>
             </form>
         </div>
- <div id="logoutStuff" style="display: none;">
+    <div id="logoutStuff" style="display: none;">
             <button id="logoutBtn">Logout</button>
             <div>
             <button id="enable2FAButton" class="btn btn-success">UPDATE/ENABLE 2FA</button>
                 <br> <br> <br>
                 <img id="qrImage" height="300" width="300"/>
                 <form id="twoFAUpdateForm">
-                    <input type="text" name="code" placeholder="Code" class="form-control"/>
-                    <button id="set" class="btn btn-primary" type="submit">SET</button>
+                    <input type="text" id="code" placeholder="Code" class="form-control"/>
+                    <button id="set" class="btn btn-primary" type="button">SET</button>
                 </form>
             </div>
+        </div>
+        <!-- New division for 2FA login -->
+        <div id="twofaLogin" style="display: none;">
+          <h2>2FA Login: Enter Code from Authenticator App</h2>
+          <input type="text" id="twoFactorCode" placeholder="Enter 2FA Code" required>
+          <button id="twoFactorSubmitBtn" type="button">Submit</button>
         </div>
 
     </div>

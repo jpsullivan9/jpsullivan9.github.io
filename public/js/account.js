@@ -71,6 +71,38 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => {
             if (!response.ok) {
+               throw new Error('Login failed: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.is_2fa) {
+                authFormsContainer.style.display = 'none';
+                twofaLogin.style.display = 'block';
+                localStorage.setItem("twoFaProfile", JSON.stringify(data.profile));
+            } else {
+            window.location.href = '/';
+            localStorage.setItem('token', data.token);
+            localStorage.setItem("profile", JSON.stringify(data.profile));
+            }
+        })
+        .catch(error => {
+            displayMessage('Login Error: ' + error.message, true);
+        });
+    });
+
+    document.getElementById('twoFactorSubmitBtn').addEventListener('click', async()=> {
+        const twoFaProfile = localStorage.getItem('twoFaProfile');
+        const code = document.getElementById('twoFactorCode').value;
+        fetch('/api/login2fa',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ twoFaProfile, code}),
+        })
+        .then(response =>{
+            if (!response.ok) {
                 throw new Error('Login failed: ' + response.statusText);
             }
             return response.json();
@@ -79,11 +111,13 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = '/';
             localStorage.setItem('token', data.token);
             localStorage.setItem("profile", JSON.stringify(data.profile));
+            localStorage.removeItem("twoFaProfile");
         })
         .catch(error => {
             displayMessage('Login Error: ' + error.message, true);
         });
     });
+
 
     signupForm.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -141,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(data => {
                 const username = data.username;
-                const userId = data.userId;
+                const userId = data.userID;
                 fetch('/api/getQRCode', {
                     method: 'POST',
                     headers: {
@@ -165,6 +199,56 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
         })
+            .catch(error => {
+                console.error('Error:', error.message);
+            });
+        } else {
+            console.error('No token found');
+        }
+    }); 
+
+    // Set 2fa code
+    document.getElementById('set').addEventListener('click', async()=> {
+        const token = localStorage.getItem('token');
+        if (token) {
+            await fetch('/api/userTokenInfo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ token }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Token verification failed');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const key = document.getElementById('code').value;
+                const userID = data.userID;
+                fetch('/api/set2fa', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({userID,key}),
+                })
+                .then(response => {
+                     if (!response.ok) {
+                        throw new Error(response.json().message);
+                    }
+                    return response.json();
+                })
+            .then(data => {
+                displayMessage("2FA Enabled/Updated")
+               
+            })
+            .catch(error => {
+                displayMessage('Error:'+ error.message);
+            });
+            
+            })
             .catch(error => {
                 console.error('Error:', error.message);
             });
