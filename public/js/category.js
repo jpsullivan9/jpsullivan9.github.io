@@ -78,17 +78,30 @@ const displayLandingPage = async (id) => {
     rootContainer.innerHTML = landingContent;
 };
 
+const loadPage = (isListing, cardId) => {
+    const spin = document.getElementById(`spin${cardId}`);
+    spin.classList.remove("d-none");
+    if (isListing) {
+        displayListingPage(cardId);
+    } else {
+        displayLandingPage(cardId);
+    }
+}; 
+
 const displayCategories = (isListing, cardColl) => {
     if (!cardColl) return "";
 
     // Generate HTML for each featured product
     const catHtml = cardColl.map(card => `
         <div class="col-sm-4 col-md-6 col-xl-3 p-2">
-            <div class="card cardslot" style="width: 15rem;" onclick="${isListing ? "displayListingPage" : "displayLandingPage"}('${card.id}');">
+            <div class="card cardslot" style="width: 15rem;" onclick="loadPage(${isListing}, '${card.id}');">
                 <img src="${noImageUrl(card.image_url)}" class="card-img-top" alt="${card.name}"/>
                 <div class="card-body">
                     <h5 class="card-title">${card.name}</h5>
                     <p class="card-text">${getNoDescContent(card.description).substring(0, 50)}...</p>
+                    <div id="spin${card.id}" class="spinner-grow d-none" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                 </div>
             </div>
         </div>
