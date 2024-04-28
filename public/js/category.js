@@ -93,7 +93,7 @@ const displayCategories = (isListing, cardColl) => {
 
     // Generate HTML for each featured product
     const catHtml = cardColl.map(card => `
-        <div class="col-sm-4 col-md-6 col-xl-3 p-2">
+        <div class="col-sm-6 col-md-6 col-lg-4 p-2">
             <div class="card cardslot" style="width: 15rem;" onclick="loadPage(${isListing}, '${card.id}');">
                 <img src="${noImageUrl(card.image_url)}" class="card-img-top" alt="${card.name}"/>
                 <div class="card-body">
