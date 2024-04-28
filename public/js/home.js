@@ -97,6 +97,7 @@ const loadMenu = () => {
 
 const initialize = async (path) => {
     buildNav(path);
+    buildFooter();
     determineLogin(path);
     displayFlash();
     await fetchCategories();
