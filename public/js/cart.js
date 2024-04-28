@@ -1,3 +1,49 @@
+document.addEventListener('DOMContentLoaded', function() {
+  // Import the clearLoginData function
+  const clearLoginData = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("coupon");
+  };
+
+  // Function to check if the user is logged in
+  const checkLoggedIn = async () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        // Send token to server for validation
+        const response = await fetch('../../api/userTokenInfo.js', { // make sure correct endpoint to verify token 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (response.ok) {
+            // User is logged in, display the cart
+            displayCart();
+        } 
+        else {
+            // Token validation failed, prompt user to log in
+            displayLoginSignupButtons();
+        }
+      } 
+      catch (error) {
+        console.error('Error validating token:', error);
+        // Handle error, prompt user to log in
+        displayLoginSignupButtons();
+      }
+    } 
+    else {
+    // No token found, prompt user to log in
+    displayLoginSignupButtons();
+    }
+  };
+
+  // Call checkLoggedIn function when the page loads
+  checkLoggedIn();
+});
+
 // Get all elements with class="closebtn"
 var close = document.getElementsByClassName("closebtn");
 var i;
@@ -155,12 +201,17 @@ function generateUniqueCartId() {
   return 'cart' + Date.now() + '' + Math.floor(Math.random() * 1000);
 }
 
-// Sample function to display cart items in HTML
+// Function to display cart items in HTML
 function displayCartItems() {
   // Assuming there's an HTML element with id 'cart-items'
   const cartContainer = document.getElementById('cart-items');
   // Clear previous contents
   cartContainer.innerHTML = '';
+
+  // Get the alert container
+  const alertContainer = document.getElementById('alert-container');
+  // Clear previous alerts
+  alertContainer.innerHTML = '';
 
   // Loop through cart.items and generate HTML for each item
   cart.items.forEach(item => {
@@ -169,16 +220,74 @@ function displayCartItems() {
       <p>${item.productName}</p>
       <p>Price: $${item.price}</p>
       <button onclick="removeFromCart('${item.productId}')">Remove</button>`;
+
+    // Check if the item is out of stock or low in stock
+    if (item.quantity === 0) {
+      const alertElement = document.createElement('div');
+      alertElement.classList.add('alert');
+      alertElement.innerHTML = `
+        Product "${item.productName}" is out of stock!
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>`;
+      alertContainer.appendChild(alertElement);
+    } else if (item.quantity < LOW_STOCK_THRESHOLD) {
+      const alertElement = document.createElement('div');
+      alertElement.classList.add('alert');
+      alertElement.innerHTML = `
+        Product "${item.productName}" is low in stock!
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>`;
+      alertContainer.appendChild(alertElement);
+    }
+
     cartContainer.appendChild(itemElement);
   });
 }
 
-// Sample usage
-cartItems.push({ productId: '1', name: 'Product 1', price: 10 });
-cartItems.push({ productId: '2', name: 'Product 2', price: 20 });
-savedForLater.push({ productId: '3', name: 'Product 3', price: 30 });
+
+// Function to display login/signup buttons
+function displayLoginSignupButtons() {
+
+    const loginsignupButton = document.createElement('button');
+    loginsignupButton.textContent = 'Log In/Sign Up';
+    loginsignupButton.addEventListener('click', function() {
+        window.location.href = 'account.html'; // Redirect to login page
+    });
+    const authFormsContainer = document.getElementById('authForms');
+    authFormsContainer.appendChild(loginsignupButton);
+}
 
 displayCartItems();
 
+// cart.js
 
+// Function to fetch cart items and display them
+async function fetchCartItems() {
+  try {
+      // Fetch cart items from server
+      const response = await fetch('../../api/add_to_cart.js'); 
+      if (response.ok) {
+          const cartItems = await response.json();
+          displayCartItems(cartItems); // Call function to display cart items
+      } else {
+          console.error('Failed to fetch cart items:', response.statusText);
+      }
+  } catch (error) {
+      console.error('Error fetching cart items:', error);
+  }
+}
 
+// Function to display cart items
+function displayCartItems(cartItems) {
+  const cartItemsContainer = document.getElementById('cartItemsContainer');
+  cartItemsContainer.innerHTML = ''; // Clear previous contents
+
+  // Loop through cart items and generate HTML for each item
+  cartItems.forEach(item => {
+      const itemElement = document.createElement('div');
+      itemElement.innerHTML = `
+          <p>${item.productName}</p>
+          <p>Price: $${item.price}</p>
+          <!-- Add more details as needed -->
+      `;
+      cartItemsContainer.appendChild(itemElement);
+  });
+}

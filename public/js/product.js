@@ -128,7 +128,29 @@ const displayDetailPage = async (pid) => {
     rootContainer.innerHTML = detailContent;
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+    const addToCartBtn = document.getElementById('addToCartBtn');
+    addToCartBtn.addEventListener('click', () => {
+        const quantity = 1; 
+        addToCart(pid, quantity); // Call function to add product to cart
+    });
+
 };
+
+function showNotification(message) {
+    const notificationContainer = document.createElement('div');
+    notificationContainer.classList.add('notification');
+    notificationContainer.textContent = message;
+    document.body.appendChild(notificationContainer);
+
+    // Hides the notification after 3 seconds
+    setTimeout(() => {
+        notificationContainer.remove();
+    }, 3000);
+}
+
+
+
 
 const displayListingPage = async (id) => {
     const subCat = await fetchSubCategories(false, id);
