@@ -14,7 +14,7 @@ const getCategories = async (req, res) => {
             }
         } else {
             // Fetch only featured products
-            const { rows } = await database.query("SELECT * FROM categories");
+            const { rows } = await database.query("SELECT * FROM categories ORDER BY name");
 
             res.status(200).json(rows);
         }

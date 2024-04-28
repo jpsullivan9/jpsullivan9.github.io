@@ -14,11 +14,11 @@ const getSubCategories = async (req, res) => {
             }
         } else if (catId) {
             // Fetch subcategories for a given category id.
-            const { rows }= await database.query("SELECT * FROM subcategories WHERE category_id = $1", [catId]);
+            const { rows }= await database.query("SELECT * FROM subcategories WHERE category_id = $1 ORDER BY name", [catId]);
             res.status(200).json(rows);
         }
         else {
-            const { rows }= await database.query("SELECT * FROM subcategories ORDER BY id");
+            const { rows }= await database.query("SELECT * FROM subcategories ORDER BY name");
             res.status(200).json(rows);
         }
     } catch (error) {

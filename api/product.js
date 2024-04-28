@@ -13,12 +13,12 @@ const retrieveProduct = async (pid, featured, scid, res) => {
             }
         } else if (featured) {
             // Fetch only featured products
-            const { rows } = await database.query("SELECT * FROM products WHERE featured = true");
+            const { rows } = await database.query("SELECT * FROM products WHERE featured = true ORDER BY name");
 
             res.status(200).json(rows);
         } else if (scid) {
             // Fetch products with the passed in subcategory
-            const { rows } = await database.query("SELECT * FROM products WHERE $1 = subcategory", [scid]);
+            const { rows } = await database.query("SELECT * FROM products WHERE $1 = subcategory ORDER BY name", [scid]);
 
             res.status(200).json(rows);
         }

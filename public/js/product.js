@@ -35,7 +35,7 @@ const displayFeaturedProducts = async () => {
         const featuredProductHTML = products.map(product => `
             <section class="cardslot p-3" onclick="buildProductDetail('${product.cid}', '${product.scid}', '${product.id}')">
                 <div class="product">
-                    <img style="width: 200px; height: 200px; background-size: 100%;" src="${noImageUrl(product.image_url)}" alt="${product.name}">
+                    <img style="width: 200px; height: 200px;" src="${noImageUrl(product.image_url)}" alt="${product.name}">
                     <h3>${product.name}</h3>
                     <p>${getNoDescContent(product.description)}</p>
                     <p>Price: $${product.price}</p>
@@ -85,7 +85,7 @@ const displayDetailPage = async (pid) => {
                             };
                             return `
                                 <div class="carousel-item ${active}">
-                                    <img src="${iurl}" style="width: 600px; height: 600px; " alt="${product.name}"/>
+                                    <img src="${iurl}" style="width: 600px; height: 600px;" alt="${product.name}"/>
                                 </div>
                             `;
                         })};
