@@ -174,8 +174,6 @@ module.exports = async (req, res) => {
                 //res.status(200).json
              couponValid = true;    
                 subtotal = subtotal.toFixed(2);
-
-           // const discounted  = await pool.query('UPDATE coupons SET active = $1 WHERE userid = $2 AND code = $3', [false, user_id, coupon]);
            
                 
             }
