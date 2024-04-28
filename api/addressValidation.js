@@ -14,7 +14,7 @@ const addressParams = {
 };
 */
 module.exports = async (req, res) =>{
-   const {street1, city, state, zip, country, email, phone} = req.query;
+   const {street1, city, state, zip, country, email, phone} = req.body;
    const addressParams = {
     verify: true,
     street1: street1,
@@ -37,9 +37,10 @@ module.exports = async (req, res) =>{
             if (address.verifications && address.verifications.delivery && address.verifications.delivery.success) {
                isValidAddress= true;
               //console.log('Address verification success');
-                res.status(200).json({message : 'address verified successfully'});
+                let shippingAddress = street1 + ' ' + city + ' ' + state + ', ' + zip + ', ' + country;
+                res.status(200).json({message : 'address verified successfully', verified : true, street1 : street1, city : city, state : state, zip : zip, country : country});
             } else {
-               res.status(400).json*({message : 'address verification failed'});
+               res.status(400).json*({message : 'address verification failed', verified : false});
                 //console.log('Address verification failed');
             }
         })
