@@ -6,7 +6,7 @@
     color: orange;
     border: none;
     cursor: pointer;
-    z-index: 1030;
+    z-index: 1040;
 }
 
 .cb-open:hover {
@@ -19,7 +19,7 @@
     right: 12px;
     color: gray;
     cursor: pointer;
-    z-index: 1040;
+    z-index: 1050;
 }
 
 .cb-close:hover {
@@ -36,7 +36,7 @@
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     border: 1px solid #ccc;
-    z-index: 1030;
+    z-index: 1040;
 }
 
 .cb-messages {
