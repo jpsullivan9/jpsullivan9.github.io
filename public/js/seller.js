@@ -13,7 +13,7 @@ const setupForm = () => {
                 event.preventDefault();
                 event.stopPropagation();
             } else {
-                const profile = JSON.parse(localStorage.getItem("profile"));
+                const profile = getProfile();
                 const formJson = {};
                 Array.from(form.elements).forEach(element => {
                     if (element.type === "button" || element.id === "") {}
@@ -102,7 +102,7 @@ const loadSubcategories = async (catId) => {
 };
 
 const sellerForm = () => {
-    const profile = JSON.parse(localStorage.getItem("profile"));
+    const profile = getProfile();
     const sellerContent = `
     <br/>
     <div class="container">

@@ -72,3 +72,11 @@ const getNoDescContent = (desc) => {
     }
     return desc;
 };
+
+const loginToken = () => {
+    return localStorage.getItem("token");
+};
+
+const getProfile = () => {
+    return JSON.parse(localStorage.getItem("profile"));
+};

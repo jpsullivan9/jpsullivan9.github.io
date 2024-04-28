@@ -29,7 +29,7 @@ const showHome = () => {
 };
 
 const determineLogin = (basePath) => {
-    const profile = JSON.parse(localStorage.getItem("profile"));
+    const profile = getProfile();
     const username = profile?.username;
     if (username !== null && username !== undefined) {
         let sellerMenu = "";
@@ -65,7 +65,7 @@ const determineLogin = (basePath) => {
 };
 
 const displayFlash = () => {
-    const profile = JSON.parse(localStorage.getItem("profile"));
+    const profile = getProfile();
     const coupon = profile?.coupon;
     if (coupon !== null && coupon !== undefined) {
         const banner = document.querySelector("#flashBanner");
