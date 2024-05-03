@@ -1,26 +1,18 @@
 const { Pool } = require("pg");
-const { tokenChecker } = require("./userTokenInfo.js");
 const jwt = require("jsonwebtoken");
-const domain = 'https://swe-project.vercel.app'
-const domain = "http://localhost:3000";
+const domain = 'https://swep-roject.vercel.app'
 
 require("dotenv").config();
 
-const tokenInfo = async (token) => {
-  try {
-    const response = await fetch(`${domain}/api/userTokenInfo`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token: token }),
+async function tokenInfo(token){
+    return jwt.verify(token, 'superSecret', (err, decoded) => {
+        if (err) {
+            return false;
+        } else {
+            return {userID: decoded.userId, username: decoded.username, isSeller: decoded.isSeller};
+        }
     });
-    const data = await response.json();
-    return data;
-  } catch {
-    return false;
-  }
-};
+}
 
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
@@ -43,13 +35,12 @@ module.exports = async (req, res) => {
   }
   const isValid = await tokenInfo(token);
 
+  const user_id = isValid?.userID;
   const { productID, quantity } = await req.body;
-  const user_id = isValid.userID;
 
-  // try {
+  try {
   if (user_id !== undefined) {
     var cartId;
-    //res.status(400).json({cart: cartId, userID : userID});
     //checks if cart is already created
     try {
       cartId = await pool.query("INSERT INTO carts (user_id) VALUES ($1)", [
@@ -77,7 +68,6 @@ module.exports = async (req, res) => {
         .json({ message: "Quantity is larger than available stock!" });
     }
 
-    //  const item_quantity  = await pool.query('SELECT quantity FROM cart_items WHERE (user_id, product_id) = $1, $2', [rows[0].user_id, productID]);
     const price = rowsProduct.rows[0].price;
     const save = false;
     cartId = cartId.rows[0].cart_id;
@@ -117,11 +107,9 @@ module.exports = async (req, res) => {
         "User not found. Please create an account with us before adding to cart",
     });
   }
-  // } catch (error) {
-  //   res
-  //     .status(500)
-  //     .json({ message: "Failure adding to cart", details: error.message });
-  // }
-  //once retrived get the cart_id
-  //once cart_id retrieved add to cart_items
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failure adding to cart", details: error.message });
+  }
 };

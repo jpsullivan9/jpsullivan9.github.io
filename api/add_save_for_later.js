@@ -5,8 +5,8 @@ const apiKey = process.env.SECRET_KEY;
 const stripe = require("stripe")(apiKey);
 const domain = "https://rutgers-swe-project.vercel.app/";
 const apiURL = "https://api.stripe.com/";
+const jwt = require("jsonwebtoken");
 
-const domain = "http://localhost:3000";
 
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
@@ -14,21 +14,16 @@ const pool = new Pool({
     rejectUnauthorized: false,
   },
 });
-const tokenInfo = async (token) => {
-  try {
-    const response = await fetch(`${domain}/api/userTokenInfo`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token: token }),
-    });
-    const data = await response.json();
-    return data;
-  } catch {
-    return false;
-  }
-};
+
+async function tokenInfo(token){
+  return jwt.verify(token, 'superSecret', (err, decoded) => {
+      if (err) {
+          return false;
+      } else {
+          return {userID: decoded.userId, username: decoded.username, isSeller: decoded.isSeller};
+      }
+  });
+}
 
 module.exports = async (req, res) => {
   const { productID } = req.body;
@@ -48,7 +43,7 @@ module.exports = async (req, res) => {
   }
   const isValid = await tokenInfo(token);
 
-  const user_id = isValid.userID;
+  const user_id = isValid?.userID;
 
   const cartId = await pool.query(
     'SELECT "cart_id" FROM carts WHERE "user_id" = $1',

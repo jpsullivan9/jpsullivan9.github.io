@@ -27,6 +27,25 @@ async function createProduct(){
 
 }
 
+document.getElementById('placeOrder-button').onclick = async function () {
+    try {
+        // Retrieve email address and product ID from the form or other elements
+        const emailAddress = document.getElementById('emailAddress').value;
+        const productID = /* Retrieve product ID */;
+        
+        // Call the fetchCheckout function to initiate the checkout process
+        const checkoutResult = await fetchCheckout(emailAddress, productID);
+        
+        // Handle the result of the checkout operation
+        // This could involve displaying a success message, redirecting to a confirmation page, etc.
+        console.log('Checkout result:', checkoutResult);
+    } catch (error) {
+        console.error('Error during checkout:', error);
+        // Handle the error, e.g., display an error message to the user
+    }
+};
+
+
 async function addPrice(productID, amount){
     try{
         const response = await fetch(`${apiURL}/prices`, {
