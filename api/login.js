@@ -13,7 +13,9 @@ const loginFunc = async (req, res) => {
             const tokenAuth = jwt.sign({ userId: user.user_id, username: user.username, isSeller: user.is_seller }, 'superSecret', { expiresIn: '1h' });
             if (isValid) {
                 if(!user.is_2fa){
-                    return res.status(200).json({ token: tokenAuth, profile: { id: user.user_id, username: user.username, seller: user.is_seller, coupon: user.code }, message: "Login successful.", is_2fa: false });
+                    return res.status(200).json({ token: tokenAuth, 
+                        profile: { id: user.user_id, username: user.username, seller: user.is_seller, coupon: user.code }, 
+                        message: "Login successful.", is_2fa: false });
                 }
                 else{
                     return res.status(200).json({profile: { id: user.user_id, username: user.username, seller: user.is_seller, coupon: user.code }, is_2fa: true})

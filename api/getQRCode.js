@@ -15,7 +15,7 @@ module.exports = async(req, res) => {
     const { username, userId } = req.body;
 
     const secret = authenticator.generateSecret();
-    const uri = authenticator.keyuri(userId, "Anzom", secret);
+    const uri = authenticator.keyuri(username, "Anzom", secret);
     const testing = await qrcode.toDataURL(uri);
 
     const result = await pool.query(
@@ -28,3 +28,4 @@ module.exports = async(req, res) => {
         res.status(500).json({error:`Error could not generate image. Error is ${e}`});
     }
 }
+
