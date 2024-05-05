@@ -3,8 +3,10 @@ const apiKey = process.env.SECRET_KEY;
 const stripe = require('stripe')(apiKey);
 const apiURL  = 'https://api.stripe.com/v1';
 const domain = 'https://swep-roject.vercel.app'
-let isValidAddress= false;
 const { Pool } = require("pg");
+const jwt = require("jsonwebtoken");
+
+
 
 const pool = new Pool({
     connectionString: process.env.POSTGRES_URL,
@@ -13,22 +15,14 @@ const pool = new Pool({
     }
   });
 
-const tokenInfo = async (token) =>{
-   try{
-      const response = await fetch(`${domain}/api/userTokenInfo`, {
-         method : 'POST',
-         headers : {
-            'Content-Type' : 'application/json',
-      },
-        body :  JSON.stringify({token : token}),                          
-      });
-      const data = await response.json();
-   return data;
-      
-   }catch{
-      return false;
-   }
-
+async function tokenInfo(token){
+    return jwt.verify(token, 'superSecret', (err, decoded) => {
+        if (err) {
+            return false
+        } else {
+            return {userID: decoded.userId, username: decoded.username, isSeller: decoded.isSeller};
+        }
+    });
 }
 
 const createProduct = async(name) =>{
