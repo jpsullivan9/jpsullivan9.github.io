@@ -4,15 +4,24 @@ const domain = 'https://swep-roject.vercel.app'
 
 require("dotenv").config();
 
-async function tokenInfo(token){
-    return jwt.verify(token, 'superSecret', (err, decoded) => {
-        if (err) {
-            return false;
-        } else {
-            return {userID: decoded.userId, username: decoded.username, isSeller: decoded.isSeller};
-        }
-    });
+const tokenInfo = async (token) =>{
+   try{
+      const response = await fetch(`${domain}/api/userTokenInfo`, {
+         method : 'POST',
+         headers : {
+            'Content-Type' : 'application/json',
+      },
+        body :  JSON.stringify({token : token}),                          
+      });
+      const data = await response.json();
+   return data;
+      
+   }catch{
+      return false;
+   }
+
 }
+
 
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
