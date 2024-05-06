@@ -10,7 +10,7 @@ const pool = new Pool({
 });
 
 
-module.exports = async(req, res) => {
+const qrCodeFunc = async(req, res) => {
     try {
     const { username, userId } = req.body;
 
@@ -32,3 +32,4 @@ module.exports = async(req, res) => {
     }
 }
 
+module.exports = qrCodeFunc;

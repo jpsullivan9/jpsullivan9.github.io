@@ -7,7 +7,7 @@ const pool = new Pool({
       rejectUnauthorized: false
     }
 });
-module.exports = async(req, res) => {
+const set2fa = async(req, res) => {
     try{
     const { userID, key } = req.body;
     let result = await pool.query(
@@ -40,3 +40,5 @@ module.exports = async(req, res) => {
     }
 
 }
+
+module.exports = set2fa;

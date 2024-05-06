@@ -8,7 +8,7 @@ const pool = new Pool({
       rejectUnauthorized: false
     }
 });
-module.exports = async(req, res) => {
+const login2fa = async(req, res) => {
     try{
     let { twoFaProfile, code } = req.body;
     if (!twoFaProfile.hasOwnProperty('id') ||
@@ -37,3 +37,5 @@ module.exports = async(req, res) => {
     }
 
 }
+
+module.exports = login2fa;
