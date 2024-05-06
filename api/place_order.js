@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const apiKey = process.env.SECRET_KEY;
 const stripe = require('stripe')(apiKey);
 const EasyPost = require('@easypost/api');
-const client = new EasyPost(process.env.EasyPost_SECRET_KEY);
+const client = new EasyPost(process.env.EasyPost_SECRET_KEY2);
 const domain  = 'https://rutgers-swe-project.vercel.app/';
 const apiURL  = 'https://api.stripe.com/' ;
 
@@ -25,7 +25,7 @@ const pool = new Pool({
     const session = await stripe.checkout.sessions.retrieve(checkout_id);
 
     if(session.payment_status != 'paid'){
-      res.status(400).json({message : "payment not completed!"});
+      res.status(403).json({message : "payment not completed!"});
     }
 
     if(coupon !== undefined){
@@ -100,7 +100,7 @@ const pool = new Pool({
     
                       let shippingAddress = street1 + ' ' + city + ' ' + state + ', ' + zip + ', ' + country;
 
-    const result = await pool.query('INSERT INTO orders (user_id, shipping_address, status, total_price, tracker) VALUES ($1, $2, $3, $4, $5)', [user_id, shippingAddress, status, subtotal, tracker.id]);
+    const result = await pool.query('INSERT INTO orders (user_id, shipping_address, status, total_price, tracker, trackerID) VALUES ($1, $2, $3, $4, $5, $6)', [user_id, shippingAddress, status, subtotal, tracker.public_url, tracker.id]);
       
    res.status(201).json({message : "Order successfully created", totalPrice : subtotal, status : status, orderID : shipment.id});
   /*}

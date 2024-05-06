@@ -92,8 +92,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    //TWO FA LOGIN
     document.getElementById('twoFactorSubmitBtn').addEventListener('click', async()=> {
-        const twoFaProfile = localStorage.getItem('twoFaProfile');
+        let twoFaProfile = localStorage.getItem('twoFaProfile');
+        twoFaProfile = JSON.parse(twoFaProfile);
         const code = document.getElementById('twoFactorCode').value;
         fetch('/api/login2fa',{
             method: 'POST',
@@ -198,8 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 console.error('Error:', error.message);
-            });
-            
+            });           
         })
             .catch(error => {
                 console.error('Error:', error.message);
@@ -249,7 +250,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 displayMessage('Error:'+ error.message);
             });
-            
             })
             .catch(error => {
                 console.error('Error:', error.message);

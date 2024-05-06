@@ -3,10 +3,8 @@ const apiKey = process.env.SECRET_KEY;
 const stripe = require('stripe')(apiKey);
 const apiURL  = 'https://api.stripe.com/v1';
 const domain = 'https://swep-roject.vercel.app'
+let isValidAddress= false;
 const { Pool } = require("pg");
-const jwt = require("jsonwebtoken");
-
-
 
 const pool = new Pool({
     connectionString: process.env.POSTGRES_URL,
@@ -15,14 +13,22 @@ const pool = new Pool({
     }
   });
 
-async function tokenInfo(token){
-    return jwt.verify(token, 'superSecret', (err, decoded) => {
-        if (err) {
-            return false
-        } else {
-            return {userID: decoded.userId, username: decoded.username, isSeller: decoded.isSeller};
-        }
-    });
+const tokenInfo = async (token) =>{
+   try{
+      const response = await fetch(`${domain}/api/userTokenInfo`, {
+         method : 'POST',
+         headers : {
+            'Content-Type' : 'application/json',
+      },
+        body :  JSON.stringify({token : token}),                          
+      });
+      const data = await response.json();
+   return data;
+      
+   }catch{
+      return false;
+   }
+
 }
 
 const createProduct = async(name) =>{
@@ -84,23 +90,6 @@ const createPaymentLink = async(priceID) => {
         });
         //console.log(response);
         const session = await response.json();
-        
-        /*
-        const session = await stripe.checkout.sessions.create({
-        success_url : 'https://google.com',
-            cancel_url = 
-            line_items: [
-                {
-                price : priceID,
-                quantity : 1,
-                }
-           ],
-        mode : 'payment',    
-
-        });
-
-       */// console.log(session);
-        //res.status(200).json({ses : session});
        return session;
     } catch (err) {
         res.status(400).json({message : "Failure to make payment link"});
@@ -139,12 +128,25 @@ module.exports = async (req, res) => {
     try{
    const cartId = await pool.query('SELECT "cart_id" FROM carts WHERE "user_id" = $1', [user_id]);
         //res.status(200).json({cart : cartId});
-    const cartItems = await pool.query('SELECT * FROM cart_items WHERE cart_id = $1', [cartId.rows[0].cart_id]);
+    const cartItems = await pool.query('SELECT * FROM cart_items WHERE cart_id = $1 AND save_for_later = $2', [cartId.rows[0].cart_id, false]);
    // res.status(200).json({cart_items : cartItems});
         let i;
         let subtotal = 0;
+        if(cartItems.rowCount == 0){
+            res.status(404).json({message : "No items in cart!"});
+        }
    for(i=0; i< cartItems.rowCount; i++){
-        subtotal += cartItems.rows[i].price;
+        subtotal += cartItems.rows[i].price * cartItems.rows[i].quantity;
+      const rowsProduct = await pool.query('SELECT * FROM products where id = $1', [cartItems.rows[i].product_id]);
+        //res.status(400).json({quantity : rowsProduct.rows[0].stock_quantity});
+        if(rowsProduct.rows[0].stock_quantity== 0){
+            //check if item is in stock
+            res.status(404).json({message : "Product is sold out!"});
+        }
+        if(rowsProduct.rows[0].stock_quantity < cartItems.rows[i].quantity){
+            res.status(400).json({message : "Quantity is larger than available stock!"});
+
+        }
    }
         
         if(coupon !== undefined){

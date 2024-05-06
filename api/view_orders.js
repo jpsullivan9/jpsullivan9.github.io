@@ -60,7 +60,7 @@ module.exports = async(req, res) => {
  // cart_item = await pool.query('SELECT * FROM cart_items WHERE cart_id = $1 AND product_id = $2', [cartId.rows[0].cart_id, productID]);
      // res.status(200).json({message : "item successfully added to save for later!", cartId : cartId.rows[0].cart_id, cartId_array : cartId});
 
-        res.status(200).json({message : "Viewing Cart:", order : orders.rows[0]});
+        res.status(200).json({message : "Viewing Orders:", order : orders.rows});
        // }else{
        //   res.status(400).json({message : "account not found!"});
       //  }

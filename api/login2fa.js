@@ -9,9 +9,14 @@ const pool = new Pool({
     }
 });
 module.exports = async(req, res) => {
-
+    try{
     let { twoFaProfile, code } = req.body;
-    twoFaProfile = JSON.parse(twoFaProfile);
+    if (!twoFaProfile.hasOwnProperty('id') ||
+        !twoFaProfile.hasOwnProperty('username') ||
+        !twoFaProfile.hasOwnProperty('seller') ||
+        !twoFaProfile.hasOwnProperty('coupon')) {
+          return res.status(404).json({ error: "Invalid profile" });
+    }
     let result = await pool.query(
         `SELECT secret FROM accounts WHERE user_id = $1`,
         [twoFaProfile.id]
@@ -26,5 +31,9 @@ module.exports = async(req, res) => {
         const tokenAuth = jwt.sign({ userId: twoFaProfile.id, username: twoFaProfile.username, isSeller: twoFaProfile.seller }, 'superSecret', { expiresIn: '1h' });
         return res.status(200).json({ token: tokenAuth, profile: { id: twoFaProfile.id, username: twoFaProfile.username, seller: twoFaProfile.seller, coupon: twoFaProfile.code }, message: "Login successful." });
       }
+    }
+    catch(e){
+        res.status(500).json({error:`Error with 2fa Login. Error is ${e}`})
+    }
 
 }

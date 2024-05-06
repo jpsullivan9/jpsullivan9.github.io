@@ -68,7 +68,7 @@ async function removeFromSavedForLater(productId) {
 // Function to handle checkout process
 function checkout() {
   // Assuming some validation and processing before redirecting to checkout page
-  // For demonstration purposes, let's just log a message
+
   console.log("Redirecting to checkout page...");
 }
 
@@ -127,41 +127,8 @@ const updateCartItemQuantity = async (productId, quantity) => {
   }
 };
 
-const onCheck = async (event, productID) => {
-  console.log("Checked", event.target.checked);
 
-  updateCheckoutButton(true);
 
-  if (event.target.checked) {
-    await removeFromSavedForLater(productID);
-  } else {
-    await moveItemToSavedForLater(productID);
-  }
-
-  updateCheckoutButton(false);
-};
-
-// on save for later button click
-const onSaveForLater = async (event, productID) => {
-  console.log("Save for later clicked");
-
-  updateCheckoutButton(true);
-
-  await moveItemToSavedForLater(productID);
-
-  updateCheckoutButton(false);
-};
-
-// on remove from cart button click
-const onDeleteForLater = async (event, productID) => {
-  console.log("Remove from cart clicked");
-
-  updateCheckoutButton(true);
-
-  await removeFromSavedForLater(productID);
-
-  updateCheckoutButton(false);
-};
 
 function updateCheckoutButton(loading) {
   const button = document.getElementById("checkout-button");
