@@ -6,6 +6,10 @@ const loginFunc = async (req, res) => {
     const { email, password } = req.body;
 
     try {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ error: "Invalid email format", details: "Please provide a valid email address" });
+      }
         const { rows } = await database.query("SELECT a.user_id, a.username, a.is_seller, a.password_hash, a.is_2fa, c.code FROM accounts AS a LEFT JOIN coupons AS c ON a.user_id = c.userid WHERE (c.active = TRUE OR c.active IS NULL) AND a.email = $1", [email]);
         if (rows.length > 0) {
             const user = rows[0];
