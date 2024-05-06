@@ -9,13 +9,13 @@ const pool = new Pool({
   }
 });
 
-async function changePasswordFunc(req, res) {
-    const { email, oldPassword, newPassword } = req.body;
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{5,}$/;
+const changePasswordFunc = async (req, res) => {
+    let { email, oldPassword, newPassword } = req.body;
+    email = email.toLowerCase();
 
     try {
         const user = await pool.query(
-            'SELECT * FROM accounts WHERE email = $1',
+            'SELECT * FROM accounts WHERE LOWER(email) = $1',
             [email]
         );
 
@@ -30,14 +30,10 @@ async function changePasswordFunc(req, res) {
             return res.status(401).json({ error: "Invalid old password" });
         }
 
-        if (!passwordRegex.test(newPassword)) {
-            return res.status(400).json({ error: "Weak password - Need one capital letter, one lowercase, one number, and at least 5 characters", details: "Password must contain at least one capital letter, one lowercase letter, one number, and be at least 5 characters long." });
-        }
-
         const newHashedPassword = await bcrypt.hash(newPassword, 10);
 
         await pool.query(
-            'UPDATE accounts SET password_hash = $1 WHERE email = $2',
+            'UPDATE accounts SET password_hash = $1 WHERE LOWER(email) = $2',
             [newHashedPassword, email]
         );
 
@@ -52,4 +48,3 @@ async function changePasswordFunc(req, res) {
 module.exports = async (req, res) => {
   res = changePasswordFunc(req, res);
 };
-  
