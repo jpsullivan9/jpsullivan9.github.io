@@ -29,6 +29,9 @@ module.exports = async(req, res) => {
             `UPDATE accounts SET is_2fa = $1 WHERE user_id = $2`,
             [true, userID]
         );
+        if (result.rowCount === 0 && result2.rowCount === 0) {
+          return res.status(404).json({ error: "Invalid userID" })
+        }
         return res.status(200).json({message: "Success"});
       }
     }

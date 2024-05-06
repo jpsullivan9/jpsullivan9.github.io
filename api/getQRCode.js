@@ -22,6 +22,9 @@ module.exports = async(req, res) => {
         `UPDATE accounts SET temp_secret = $1 WHERE username = $2`,
         [secret, username]
     );
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Invalid Username" });
+    }
 
       res.status(200).json({image:testing});
     } catch (e) {
