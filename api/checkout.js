@@ -132,7 +132,7 @@ module.exports = async (req, res) => {
    // res.status(200).json({cart_items : cartItems});
         let i;
         let subtotal = 0;
-        if(cartItem.rowCount == 0){
+        if(cartItems.rowCount == 0){
             res.status(404).json({message : "No items in cart!"});
         }
    for(i=0; i< cartItems.rowCount; i++){
