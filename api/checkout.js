@@ -132,6 +132,9 @@ module.exports = async (req, res) => {
    // res.status(200).json({cart_items : cartItems});
         let i;
         let subtotal = 0;
+        if(cartItem.rowCount == 0){
+            res.status(404).json({message : "No items in cart!"});
+        }
    for(i=0; i< cartItems.rowCount; i++){
         subtotal += cartItems.rows[i].price * cartItems.rows[i].quantity;
       const rowsProduct = await pool.query('SELECT * FROM products where id = $1', [cartItems.rows[i].product_id]);
